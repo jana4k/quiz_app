@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:myapp/UI/signup.dart';
-import 'package:myapp/models/auth_exception.dart';
-import 'package:myapp/models/auth_service.dart';
+import 'package:myapp/authentication/auth_exception.dart';
+import 'package:myapp/authentication/auth_service.dart';
 import 'package:myapp/widgets/loading_dialog.dart';
 
 class loginPage extends StatefulWidget {

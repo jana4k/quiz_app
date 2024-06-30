@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/models/auth_exception.dart';
-import 'package:myapp/models/auth_service.dart';
+import 'package:myapp/authentication/auth_exception.dart';
+import 'package:myapp/authentication/auth_service.dart';
 import 'package:myapp/widgets/loading_dialog.dart';
 
 class SignupPage extends StatefulWidget {

@@ -5,6 +5,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:ui' as ui;
 
+import 'package:myapp/UI/quiz_page.dart';
+
 class HomePage extends StatefulWidget {
   final User user;
   const HomePage({super.key, required this.user});
@@ -34,6 +36,9 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
+
+  
+
 
   @override
   Widget build(BuildContext context) {
@@ -78,9 +83,18 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 _scaffoldKey.currentState?.openDrawer();
               },
-              child: const CircleAvatar(
-                backgroundColor: Color(0xffEB60DF),
-                child: Icon(Icons.person, size: 30, color: Colors.white),
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: const Color(0xffEB60DF),
+                        width: 2.0,
+                      ),
+                    ),
+                    child: const Icon(Icons.person,
+                        size: 35, color: Color(0xffEB60DF))),
               ),
             ),
             const SizedBox(width: 10),
@@ -134,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(width: 5),
                 Text(
-                  '200',
+                  'score',
                   style: TextStyle(
                     color: Color(0xff2100a6),
                     fontWeight: FontWeight.w500,
@@ -234,7 +248,10 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         onPressed: () {
-                          // Navigate to quiz page
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>  QuizScreen(userName: _userName)));
                         },
                         child: const Row(
                           mainAxisSize: MainAxisSize.min,
@@ -266,7 +283,7 @@ class _HomePageState extends State<HomePage> {
           ),
           const SizedBox(height: 16.0),
           const CategoryList(),
-           const SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
           const Text(
             'Recent',
             style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
