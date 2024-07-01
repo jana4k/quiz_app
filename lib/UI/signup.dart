@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/authentication/auth_exception.dart';
 import 'package:myapp/authentication/auth_service.dart';
+import 'package:myapp/authentication/auth_wrapper.dart';
 import 'package:myapp/widgets/loading_dialog.dart';
 
 class SignupPage extends StatefulWidget {
-  const SignupPage({Key? key}) : super(key: key);
+  const SignupPage({super.key});
 
   @override
   _SignupPageState createState() => _SignupPageState();
@@ -16,7 +17,7 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-void _signup() {
+  void _signup() {
     LoadingDialog.show(context);
     AuthService()
         .signUpWithEmailAndPassword(
@@ -25,14 +26,18 @@ void _signup() {
       password: _passwordController.text,
     )
         .then((status) {
-       LoadingDialog.hide(context);
-  
+      LoadingDialog.hide(context);
+
       if (status == AuthResultStatus.successful) {
-       
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Signup successful')),
-          );
-        
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Signup successful')),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AuthenticationWrapper(),
+          ),
+        );
       } else {
         String error = AuthExceptionHandler.generateExceptionMessage(status);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -46,7 +51,6 @@ void _signup() {
       );
     });
   }
- 
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +146,6 @@ void _signup() {
     );
   }
 
-  
   @override
   void dispose() {
     _nameController.dispose();

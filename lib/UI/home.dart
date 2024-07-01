@@ -265,8 +265,11 @@ class _HomePageState extends State<HomePage> {
                                   builder: (context) => QuizScreen(
                                         userName: _userName,
                                         user: widget.user,
-                                      )));
-                        },
+                                      ))).then((_) {
+                _fetchUserName(); 
+              });
+            }
+                        ,
                         child: const Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -304,7 +307,9 @@ class _HomePageState extends State<HomePage> {
                         builder: (context) => QuizScreen(
                               userName: _userName,
                               user: widget.user,
-                            )));
+                            ))).then((_) {
+                _fetchUserName(); 
+              });
               },
               child: const CategoryList()),
           const SizedBox(height: 16.0),
@@ -323,7 +328,9 @@ class _HomePageState extends State<HomePage> {
                           builder: (context) => QuizScreen(
                                 userName: _userName,
                                 user: widget.user,
-                              )));
+                              ))).then((_) {
+                _fetchUserName(); 
+              });;
                 },
                 child: const QuizCard(
                   title: 'History Quiz',
@@ -341,7 +348,9 @@ class _HomePageState extends State<HomePage> {
                           builder: (context) => QuizScreen(
                                 userName: _userName,
                                 user: widget.user,
-                              )));
+                              ))).then((_) {
+                _fetchUserName(); 
+              });
                 },
                 child: const QuizCard(
                   title: 'Science Quiz',
@@ -359,7 +368,9 @@ class _HomePageState extends State<HomePage> {
                             builder: (context) => QuizScreen(
                                   userName: _userName,
                                   user: widget.user,
-                                )));
+                                ))).then((_) {
+                _fetchUserName(); 
+              });
                   },
                   child: const QuizCard(
                     title: 'Sports Quiz',
@@ -376,7 +387,9 @@ class _HomePageState extends State<HomePage> {
                           builder: (context) => QuizScreen(
                                 userName: _userName,
                                 user: widget.user,
-                              )));
+                              ))).then((_) {
+                _fetchUserName(); 
+              });
                 },
                 child: const QuizCard(
                   title: 'Music Quiz',

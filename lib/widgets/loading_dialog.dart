@@ -58,12 +58,15 @@ class ConnectivityService {
 
   void _showConnectivitySnackBar(
       ConnectivityResult result, BuildContext context) {
-    final isConnected = result != ConnectivityResult.none;
+    if (result == ConnectivityResult.none) {
+      _showNoInternetSnackBar(context);
+    }
+  }
+
+  void _showNoInternetSnackBar(BuildContext context) {
     final snackBar = SnackBar(
-      content: Text(
-          isConnected ? 'Connected to the Internet' : 'No Internet Connection'),
-      backgroundColor:
-          isConnected ? const Color(0xff2100a6) : const Color(0xffE21FD0),
+      content: const Text('No Internet Connection'),
+      backgroundColor: const Color(0xffE21FD0),
       behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 3),
       margin: const EdgeInsets.all(8.0),

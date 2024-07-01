@@ -13,17 +13,14 @@ class AuthService {
     try {
       final UserCredential authResult = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
-
-      if (authResult.user != null) {
-        
-         _saveUserDetails(
+ await _saveUserDetails(
             name: name, email: email, userId: authResult.user!.uid);
-          await  authResult.user!.updateDisplayName(name);
+          // await  authResult.user!.updateDisplayName(name);
+       if (authResult.user != null) {
         status = AuthResultStatus.successful;
       } else {
         status = AuthResultStatus.undefined;
       }
-      return status;
     } on FirebaseAuthException catch (e) {
       status = AuthExceptionHandler.handleException(e);
     } catch (e) {
@@ -62,6 +59,8 @@ class AuthService {
       'name': name,
       'email': email,
       'userId': userId,
+      'points': 0,
     });
   }
 }
+ 
