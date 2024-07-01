@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'dart:ui' as ui;
 
 import 'package:myapp/UI/quiz_page.dart';
+import 'package:myapp/widgets/loading_dialog.dart';
 
 class HomePage extends StatefulWidget {
   final User user;
@@ -18,11 +20,21 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? _userName;
-
+  int _points = 0;
+ 
+ final ConnectivityService _connectivityService = ConnectivityService();
+  
   @override
   void initState() {
     super.initState();
     _fetchUserName();
+     _connectivityService.initialize(context);
+  }
+
+   @override
+  void dispose() {
+    _connectivityService.dispose(); // Dispose the connectivity service
+    super.dispose();
   }
 
   Future<void> _fetchUserName() async {
@@ -33,12 +45,11 @@ class _HomePageState extends State<HomePage> {
     if (doc.exists) {
       setState(() {
         _userName = doc['name'];
+        _points = doc['points'] ?? 0;
       });
     }
   }
-
-  
-
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -134,10 +145,10 @@ class _HomePageState extends State<HomePage> {
               color: const Color.fromARGB(255, 248, 248, 248),
               borderRadius: BorderRadius.circular(13),
             ),
-            child: const Row(
+            child: Row(
               children: [
-                SizedBox(width: 5),
-                CircleAvatar(
+                const SizedBox(width: 5),
+                const CircleAvatar(
                   backgroundColor: Color(0xffFBDEF8),
                   radius: 14,
                   child: Icon(
@@ -146,15 +157,15 @@ class _HomePageState extends State<HomePage> {
                     size: 21,
                   ),
                 ),
-                SizedBox(width: 5),
+                const SizedBox(width: 5),
                 Text(
-                  'score',
-                  style: TextStyle(
+                  '$_points',
+                  style: const TextStyle(
                     color: Color(0xff2100a6),
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(width: 5),
+                const SizedBox(width: 5),
               ],
             ),
           ),
@@ -251,7 +262,10 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>  QuizScreen(userName: _userName)));
+                                  builder: (context) => QuizScreen(
+                                        userName: _userName,
+                                        user: widget.user,
+                                      )));
                         },
                         child: const Row(
                           mainAxisSize: MainAxisSize.min,
@@ -282,43 +296,96 @@ class _HomePageState extends State<HomePage> {
             style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16.0),
-          const CategoryList(),
+          GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => QuizScreen(
+                              userName: _userName,
+                              user: widget.user,
+                            )));
+              },
+              child: const CategoryList()),
           const SizedBox(height: 16.0),
           const Text(
             'Recent',
             style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16.0),
-          const Column(
+          Column(
             children: [
-              QuizCard(
-                title: 'History Quiz',
-                questions: '10 questions',
-                status: 'Completed',
-                iconData: Icons.history,
-                statusColor: Colors.green,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => QuizScreen(
+                                userName: _userName,
+                                user: widget.user,
+                              )));
+                },
+                child: const QuizCard(
+                  title: 'History Quiz',
+                  questions: '10 questions',
+                  status: 'Completed',
+                  iconData: Icons.history,
+                  statusColor: Colors.green,
+                ),
               ),
-              QuizCard(
-                title: 'Science Quiz',
-                questions: '8 questions',
-                status: 'In Progress',
-                iconData: Icons.science,
-                statusColor: Colors.orange,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => QuizScreen(
+                                userName: _userName,
+                                user: widget.user,
+                              )));
+                },
+                child: const QuizCard(
+                  title: 'Science Quiz',
+                  questions: '8 questions',
+                  status: 'In Progress',
+                  iconData: Icons.science,
+                  statusColor: Colors.orange,
+                ),
               ),
-              QuizCard(
-                title: 'Sports Quiz',
-                questions: '12 questions',
-                status: 'Completed',
-                iconData: Icons.sports_soccer,
-                statusColor: Colors.green,
-              ),
-              QuizCard(
-                title: 'Music Quiz',
-                questions: '15 questions',
-                status: 'In Progress',
-                iconData: Icons.music_note,
-                statusColor: Colors.orange,
-              ),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => QuizScreen(
+                                  userName: _userName,
+                                  user: widget.user,
+                                )));
+                  },
+                  child: const QuizCard(
+                    title: 'Sports Quiz',
+                    questions: '12 questions',
+                    status: 'Completed',
+                    iconData: Icons.sports_soccer,
+                    statusColor: Colors.green,
+                  )),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => QuizScreen(
+                                userName: _userName,
+                                user: widget.user,
+                              )));
+                },
+                child: const QuizCard(
+                  title: 'Music Quiz',
+                  questions: '15 questions',
+                  status: 'In Progress',
+                  iconData: Icons.music_note,
+                  statusColor: Colors.orange,
+                ),
+              )
             ],
           ),
         ])),

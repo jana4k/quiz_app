@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -6,8 +7,9 @@ import 'package:lottie/lottie.dart';
 
 class QuizScreen extends StatefulWidget {
   final String? userName;
+final User user;
 
-  const QuizScreen({super.key, required this.userName});
+  const QuizScreen({super.key, required this.userName,required this.user,});
 
   @override
   _QuizScreenState createState() => _QuizScreenState();
@@ -72,29 +74,31 @@ class _QuizScreenState extends State<QuizScreen> {
     }
     _nextQuestion();
   }
+
 Future<void> _updatePoints(int score) async {
-    final userDoc = FirebaseFirestore.instance.collection('users').doc(widget.userName);
+    final userDoc = FirebaseFirestore.instance.collection('users').doc(widget.user.uid);
     final doc = await userDoc.get();
     if (doc.exists) {
       int currentPoints = doc['points'] ?? 0;
       await userDoc.update({'points': currentPoints + score});
     }
   }
+
   void _showResults() {
     _timer?.cancel();
     _updatePoints(_score).then((_) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => ResultsScreen(
+          builder: (context) => ResultScreen(
             score: _score,
-            userName: widget.userName,
+            userName: widget.userName, userId: widget.user.uid,
           ),
         ),
       );
     });
   }
-
+ 
   @override
   Widget build(BuildContext context) {
     final question = _questions[_currentQuestionIndex];
@@ -272,29 +276,47 @@ Future<void> _updatePoints(int score) async {
   }
 }
 
-class ResultsScreen extends StatelessWidget {
-  final int score;
+class ResultScreen extends StatefulWidget {
+ final int score;
+  final String userId;
   final String? userName;
 
-  const ResultsScreen({super.key, required this.score, required this.userName});
+  const ResultScreen({super.key, required this.score, required this.userId, required this.userName});
+
+  
 
   @override
-  Widget build(BuildContext context) {
+  State<ResultScreen> createState() => _ResultScreenState();
+}
+
+class _ResultScreenState extends State<ResultScreen> {
+
+   int _points = 0;
+  Future<int> _fetchPoints() async {
+    final doc = await FirebaseFirestore.instance.collection('users').doc(widget.userId).get();
+    if (doc.exists) {
+      setState(() {
+        _points = doc['points'] ?? 0;
+      });
+  
+  }
+    return 0;
+  }
+  @override
+Widget build(BuildContext context) {
+    _fetchPoints();
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
+      body: Center(
+        child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                 const SizedBox(height: 30),
-                Container(
+                const SizedBox(height: 30),
+                SizedBox(
                   width: 250,
                   height: 250,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                  ),
                   child: Lottie.asset(
                     'assets/gif/congrats.json',
                     fit: BoxFit.contain,
@@ -310,7 +332,7 @@ class ResultsScreen extends StatelessWidget {
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      '$score points',
+                      '${widget.score} points',
                       style: const TextStyle(
                           fontSize: 22,
                           color: Color(0xff2100a6),
@@ -328,57 +350,53 @@ class ResultsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  '$userName have completed the quiz!',
+                  '${widget.userName}, you have completed the quiz!',
                   style: const TextStyle(fontSize: 16),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 Container(
-                  width: 80,
-              
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: const Color.fromARGB(255, 219, 219, 219),
-                    ),
-                    color: const Color.fromARGB(255, 248, 248, 248),
-                    borderRadius: BorderRadius.circular(13),
-                  ),
-                  child:  Row(
-                    children: [
-                      SizedBox(width: 5),
-                      CircleAvatar(
-                        backgroundColor: Color(0xffFBDEF8),
-                        radius: 14,
-                        child: Icon(
-                          Icons.diamond,
-                          color: Color(0xffE21FD0),
-                          size: 21,
+                        width: 80,
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: const Color.fromARGB(255, 219, 219, 219),
+                          ),
+                          color: const Color.fromARGB(255, 248, 248, 248),
+                          borderRadius: BorderRadius.circular(13),
                         ),
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        '$score',
-                        style: TextStyle(
-                          color: Color(0xff2100a6),
-                          fontWeight: FontWeight.w500,
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 5),
+                            const CircleAvatar(
+                              backgroundColor: Color(0xffFBDEF8),
+                              radius: 14,
+                              child: Icon(
+                                Icons.diamond,
+                                color: Color(0xffE21FD0),
+                                size: 21,
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              '$_points',
+                              style: const TextStyle(
+                                color: Color(0xff2100a6),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 40),
+            ),
+                 const SizedBox(height: 40),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff2100a6)),
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.popUntil(context, (route) => route.isFirst);
                   },
                   child: const Text('Back to Home'),
                 ),
-              ],
+            ],
             ),
           ),
         ),
@@ -387,6 +405,8 @@ class ResultsScreen extends StatelessWidget {
   }
 }
 
+
+ 
 class Question {
   final String text;
   final List<String> options;

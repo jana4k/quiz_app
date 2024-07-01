@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 
 class LoadingDialog {
@@ -37,6 +40,41 @@ class LoadingDialog {
   }
 
   static void hide(BuildContext context) {
-   Navigator.of(context, rootNavigator: true).pop();
+    Navigator.of(context, rootNavigator: true).pop();
+  }
+}
+
+class ConnectivityService {
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _subscription;
+
+  void initialize(BuildContext context) {
+    _subscription = _connectivity.onConnectivityChanged.listen(
+      (ConnectivityResult result) {
+        _showConnectivitySnackBar(result, context);
+      },
+    );
+  }
+
+  void _showConnectivitySnackBar(
+      ConnectivityResult result, BuildContext context) {
+    final isConnected = result != ConnectivityResult.none;
+    final snackBar = SnackBar(
+      content: Text(
+          isConnected ? 'Connected to the Internet' : 'No Internet Connection'),
+      backgroundColor:
+          isConnected ? const Color(0xff2100a6) : const Color(0xffE21FD0),
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(seconds: 3),
+      margin: const EdgeInsets.all(8.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void dispose() {
+    _subscription.cancel();
   }
 }
