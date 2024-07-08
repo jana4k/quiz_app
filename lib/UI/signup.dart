@@ -58,7 +58,11 @@ class _SignupPageState extends State<SignupPage> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: const Text('Sign Up'),
+          title: const Text('Sign Up',
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+          centerTitle: true,
+          backgroundColor: const Color(0xff2100a6),
         ),
         body: Form(
           key: _formKey,
@@ -69,72 +73,84 @@ class _SignupPageState extends State<SignupPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage: const AssetImage(
-                          'assets/images/file.jpg'), // Add your logo image in the assets folder
-                      backgroundColor: Colors.transparent,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.pink,
-                            width: 4.0,
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundImage: const AssetImage(
+                              'assets/images/file.jpg'), // Add your logo image in the assets folder
+                          backgroundColor: Colors.transparent,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: const Color(0xff2100a6),
+                                width: 4.0,
+                              ),
+                            ),
                           ),
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: 30),
+                    const Text(
+                      'Join the Quiz!',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff2100a6),
                       ),
                     ),
                     const SizedBox(height: 20),
-                    TextFormField(
-                      validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return 'Please enter your name';
-                        }
-                        return null;
-                      },
+                    _buildTextField(
                       controller: _nameController,
-                      decoration: const InputDecoration(labelText: 'Name'),
+                      labelText: 'Name',
+                      icon: Icons.verified_user,
                     ),
                     const SizedBox(height: 20),
-                    TextFormField(
-                      validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        return null;
-                      },
+                    _buildTextField(
                       controller: _emailController,
-                      decoration: const InputDecoration(labelText: 'Email'),
+                      labelText: 'Email',
+                      icon: Icons.email,
                     ),
                     const SizedBox(height: 20),
-                    TextFormField(
-                      validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return 'Please enter your Password';
-                        }
-                        return null;
-                      },
+                    _buildTextField(
                       controller: _passwordController,
-                      decoration: const InputDecoration(labelText: 'Password'),
+                      labelText: 'Password',
+                      icon: Icons.lock,
                       obscureText: true,
                     ),
                     const SizedBox(height: 20),
-                    ElevatedButton(
+                    ElevatedButton.icon(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           _signup();
                         }
                       },
+                      icon: const Icon(Icons.check),
+                      label: const Text('Sign Up'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: const Color(0xff2100a6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 15),
+                        textStyle: const TextStyle(fontSize: 18),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
                       ),
-                      child: const Text('Sign Up'),
                     ),
+                    const SizedBox(height: 20),
                     TextButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: const Text('Already have an account? Login'),
+                      child: const Text(
+                        'Already have an account? Login',
+                        style: TextStyle(
+                            color: Color(0xff2100a6),
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ],
                 ),
@@ -142,6 +158,36 @@ class _SignupPageState extends State<SignupPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String labelText,
+    required IconData icon,
+    bool obscureText = false,
+  }) {
+    return TextFormField(
+      validator: (text) {
+        if (text == null || text.isEmpty) {
+          return 'Please enter your $labelText';
+        }
+        return null;
+      },
+      controller: controller,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+        labelText: labelText,
+        prefixIcon: Icon(icon, color: const Color(0xff2100a6)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: const BorderSide(color: Color(0xff2100a6)),
+        ),
+        labelStyle: const TextStyle(color: Color(0xff2100a6)),
       ),
     );
   }

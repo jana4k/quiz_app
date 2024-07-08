@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
@@ -7,7 +8,34 @@ import 'package:flutter/widgets.dart';
 import 'dart:ui' as ui;
 
 import 'package:myapp/UI/quiz_page.dart';
+
 import 'package:myapp/widgets/loading_dialog.dart';
+
+class Category {
+  final String id;
+  final String name;
+
+  Category({required this.id, required this.name});
+
+  factory Category.fromMap(Map<String, dynamic> data, String documentId) {
+    return Category(
+      id: documentId,
+      name: data['name'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {'name': name};
+  }
+}
+
+Future<List<Category>> fetchCategories() async {
+  final querySnapshot =
+      await FirebaseFirestore.instance.collection('questions').get();
+  return querySnapshot.docs
+      .map((doc) => Category.fromMap(doc.data(), doc.id))
+      .toList();
+}
 
 class HomePage extends StatefulWidget {
   final User user;
@@ -21,20 +49,36 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? _userName;
   int _points = 0;
- 
- final ConnectivityService _connectivityService = ConnectivityService();
-  
+
+  final ConnectivityService _connectivityService = ConnectivityService();
+
   @override
   void initState() {
     super.initState();
+
     _fetchUserName();
-     _connectivityService.initialize(context);
+    _connectivityService.initialize(context);
   }
 
-   @override
+  @override
   void dispose() {
     _connectivityService.dispose(); // Dispose the connectivity service
     super.dispose();
+  }
+
+  void _onCategorySelected(BuildContext context, String category) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => QuizScreen(
+          userName: _userName,
+          user: widget.user,
+          category: category,
+        ),
+      ),
+    ).then((_) {
+      _fetchUserName();
+    });
   }
 
   Future<void> _fetchUserName() async {
@@ -49,7 +93,6 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
- 
 
   @override
   Widget build(BuildContext context) {
@@ -68,13 +111,15 @@ class _HomePageState extends State<HomePage> {
                 child: Icon(Icons.person, size: 50, color: Colors.white),
               ),
             ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Logout'),
-              onTap: () {
-                FirebaseAuth.instance.signOut();
-                Navigator.pop(context); // Close the drawer
-              },
+            Expanded(
+              child: ListTile(
+                leading: const Icon(Icons.logout),
+                title: const Text('Logout'),
+                onTap: () {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.pop(context); // Close the drawer
+                },
+              ),
             ),
             ListTile(
               title: const Text(
@@ -259,17 +304,27 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => QuizScreen(
-                                        userName: _userName,
-                                        user: widget.user,
-                                      ))).then((_) {
-                _fetchUserName(); 
-              });
-            }
-                        ,
+//       FirebaseFirestore.instance.collection('questions').get().then((querySnapshot) {
+//   querySnapshot.docs.forEach((doc) {
+//     if (kDebugMode) {
+//       print(doc.data());
+//     }
+//   });
+// });
+
+// if (kDebugMode) {
+//   print(FirebaseFirestore.instance.collection('questions').toString());
+// }
+                          //             Navigator.push(
+                          //                 context,
+                          //                 MaterialPageRoute(
+                          //                     builder: (context) => QuizScreen(
+                          //                           userName: _userName,
+                          //                           user: widget.user,
+                          //                         ))).then((_) {
+                          //   _fetchUserName();
+                          // });
+                        },
                         child: const Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -299,19 +354,10 @@ class _HomePageState extends State<HomePage> {
             style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16.0),
-          GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => QuizScreen(
-                              userName: _userName,
-                              user: widget.user,
-                            ))).then((_) {
-                _fetchUserName(); 
-              });
-              },
-              child: const CategoryList()),
+          CategoryList(
+            onCategorySelected: (category) =>
+                _onCategorySelected(context, category),
+          ),
           const SizedBox(height: 16.0),
           const Text(
             'Recent',
@@ -322,15 +368,15 @@ class _HomePageState extends State<HomePage> {
             children: [
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => QuizScreen(
-                                userName: _userName,
-                                user: widget.user,
-                              ))).then((_) {
-                _fetchUserName(); 
-              });;
+                  //     Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //             builder: (context) => QuizScreen(
+                  //                   userName: _userName,
+                  //                   user: widget.user,
+                  //                 ))).then((_) {
+                  //   _fetchUserName();
+                  // });
                 },
                 child: const QuizCard(
                   title: 'History Quiz',
@@ -340,137 +386,70 @@ class _HomePageState extends State<HomePage> {
                   statusColor: Colors.green,
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => QuizScreen(
-                                userName: _userName,
-                                user: widget.user,
-                              ))).then((_) {
-                _fetchUserName(); 
-              });
-                },
-                child: const QuizCard(
-                  title: 'Science Quiz',
-                  questions: '8 questions',
-                  status: 'In Progress',
-                  iconData: Icons.science,
-                  statusColor: Colors.orange,
-                ),
-              ),
-              GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => QuizScreen(
-                                  userName: _userName,
-                                  user: widget.user,
-                                ))).then((_) {
-                _fetchUserName(); 
-              });
-                  },
-                  child: const QuizCard(
-                    title: 'Sports Quiz',
-                    questions: '12 questions',
-                    status: 'Completed',
-                    iconData: Icons.sports_soccer,
-                    statusColor: Colors.green,
-                  )),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => QuizScreen(
-                                userName: _userName,
-                                user: widget.user,
-                              ))).then((_) {
-                _fetchUserName(); 
-              });
-                },
-                child: const QuizCard(
-                  title: 'Music Quiz',
-                  questions: '15 questions',
-                  status: 'In Progress',
-                  iconData: Icons.music_note,
-                  statusColor: Colors.orange,
-                ),
-              )
+              //   GestureDetector(
+              //     onTap: () {
+              //       Navigator.push(
+              //           context,
+              //           MaterialPageRoute(
+              //               builder: (context) => QuizScreen(
+              //                     userName: _userName,
+              //                     user: widget.user,
+              //                   ))).then((_) {
+              //     _fetchUserName();
+              //   });
+              //     },
+              //     child: const QuizCard(
+              //       title: 'Science Quiz',
+              //       questions: '8 questions',
+              //       status: 'In Progress',
+              //       iconData: Icons.science,
+              //       statusColor: Colors.orange,
+              //     ),
+              //   ),
+              //   GestureDetector(
+              //       onTap: () {
+              //         Navigator.push(
+              //             context,
+              //             MaterialPageRoute(
+              //                 builder: (context) => QuizScreen(
+              //                       userName: _userName,
+              //                       user: widget.user,
+              //                     ))).then((_) {
+              //     _fetchUserName();
+              //   });
+              //       },
+              //       child: const QuizCard(
+              //         title: 'Sports Quiz',
+              //         questions: '12 questions',
+              //         status: 'Completed',
+              //         iconData: Icons.sports_soccer,
+              //         statusColor: Colors.green,
+              //       )),
+              //   GestureDetector(
+              //     onTap: () {
+              //       Navigator.push(
+              //           context,
+              //           MaterialPageRoute(
+              //               builder: (context) => QuizScreen(
+              //                     userName: _userName,
+              //                     user: widget.user,
+              //                   ))).then((_) {
+              //     _fetchUserName();
+              //   });
+              //     },
+              //     child: const QuizCard(
+              //       title: 'Music Quiz',
+              //       questions: '15 questions',
+              //       status: 'In Progress',
+              //       iconData: Icons.music_note,
+              //       statusColor: Colors.orange,
+              //     ),
+              //   )
             ],
           ),
         ])),
       ),
     ));
-  }
-}
-
-class CategoryCard extends StatelessWidget {
-  final String title;
-  final IconData icon;
-
-  const CategoryCard({super.key, required this.title, required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-      child: Container(
-        width: 150, // Adjust the width of the card
-        height: 120, // Adjust the height of the card
-        decoration: BoxDecoration(
-          color: const Color(0xffFFEBFF),
-          borderRadius: BorderRadius.circular(16.0),
-        ),
-        child: Stack(
-          children: [
-            // Background icon
-            Positioned(
-              top: 35,
-              right: -20,
-              child: ShaderMask(
-                blendMode: BlendMode.srcIn,
-                shaderCallback: (Rect bounds) {
-                  return ui.Gradient.linear(
-                    const Offset(4.0, 25.0),
-                    const Offset(25.0, 5.0),
-                    const [Colors.purple, Colors.blue],
-                  );
-                },
-                child: Icon(
-                  icon,
-                  size: 100,
-                  color: Colors.white.withOpacity(0.3),
-                ),
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // const Spacer(),
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 16.0,
-                      color: Color(0xff2100a6),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const Spacer(),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
 
@@ -551,34 +530,123 @@ class QuizCard extends StatelessWidget {
   }
 }
 
-class CategoryList extends StatelessWidget {
-  const CategoryList({super.key});
+class CategoryCard extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  const CategoryCard({
+    super.key,
+    required this.title,
+    required this.icon,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          CategoryCard(title: 'History', icon: Icons.history_edu),
-          SizedBox(
-            width: 5,
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        child: Container(
+          width: 150,
+          height: 120,
+          decoration: BoxDecoration(
+            color: const Color(0xffFFEBFF),
+            borderRadius: BorderRadius.circular(16.0),
           ),
-          CategoryCard(title: 'Science', icon: Icons.science),
-          SizedBox(
-            width: 5,
+          child: Stack(
+            children: [
+              Positioned(
+                top: 35,
+                right: -20,
+                child: ShaderMask(
+                  blendMode: BlendMode.srcIn,
+                  shaderCallback: (Rect bounds) {
+                    return ui.Gradient.linear(
+                      const Offset(4.0, 25.0),
+                      const Offset(25.0, 5.0),
+                      const [Colors.purple, Colors.blue],
+                    );
+                  },
+                  child: Icon(
+                    icon,
+                    size: 100,
+                    color: Colors.white.withOpacity(0.3),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                        color: Color(0xff2100a6),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const Spacer(),
+                  ],
+                ),
+              ),
+            ],
           ),
-          CategoryCard(title: 'Sports', icon: Icons.sports_soccer),
-          SizedBox(
-            width: 5,
-          ),
-          CategoryCard(title: 'Music', icon: Icons.music_note),
-          SizedBox(
-            width: 5,
-          ),
-          // Add more categories here
-        ],
+        ),
       ),
+    );
+  }
+}
+
+class CategoryList extends StatelessWidget {
+  final Function(String) onCategorySelected;
+
+  const CategoryList({super.key, required this.onCategorySelected});
+  IconData getCategoryIcon(String categoryName) {
+    switch (categoryName) {
+      case 'Java':
+        return Icons.computer;
+      case 'Python':
+        return Icons.code;
+      case 'Aptitude':
+        return Icons.calculate;
+      default:
+        return Icons.category;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<Category>>(
+      future: fetchCategories(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(child: Text('No categories found'));
+        }
+
+        final categories = snapshot.data!;
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: categories.map((category) {
+              return CategoryCard(
+                title: category.name,
+                icon: getCategoryIcon(category.name),
+                onTap: () => onCategorySelected(category.id),
+              );
+            }).toList(),
+          ),
+        );
+      },
     );
   }
 }

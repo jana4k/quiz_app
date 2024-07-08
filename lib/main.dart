@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
                 shape: WidgetStateProperty.all<OutlinedBorder>(
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))))),
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xffEB60DF)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xffE21FD0)),
         useMaterial3: true,
       ),
       home: const AuthenticationWrapper(),

@@ -5,42 +5,81 @@ import 'dart:async';
 
 import 'package:lottie/lottie.dart';
 
+class Question {
+  final String id;
+  final String text;
+  final List<String> options;
+  final int answerIndex;
+
+  Question({
+    required this.id,
+    required this.text,
+    required this.options,
+    required this.answerIndex,
+  });
+
+  // Create a factory method to convert a Map into a Question object
+  factory Question.fromMap(Map<String, dynamic> map, String id) {
+    return Question(
+      id: id,
+      text: map['text'] ?? '',
+      options: List<String>.from(map['options'] ?? []),
+      answerIndex: map['answerIndex'] ?? 0,
+    );
+  }
+}
+
 class QuizScreen extends StatefulWidget {
   final String? userName;
-final User user;
+  final User user;
+  final String category;
 
-  const QuizScreen({super.key, required this.userName,required this.user,});
+  const QuizScreen({
+    super.key,
+    required this.userName,
+    required this.user,
+    required this.category,
+  });
 
   @override
   _QuizScreenState createState() => _QuizScreenState();
 }
 
 class _QuizScreenState extends State<QuizScreen> {
-  final List<Question> _questions = [
-    Question(
-        text: 'What is the capital of France',
-        options: ['Paris', 'London', 'Berlin', 'Madrid'],
-        answerIndex: 0),
-    Question(
-        text: 'Who wrote "To Kill a Mockingbird"',
-        options: [
-          'Harper Lee',
-          'Mark Twain',
-          'Ernest Hemingway',
-          'F. Scott Fitzgerald'
-        ],
-        answerIndex: 0),
-    // Add more questions here
-  ];
   int _currentQuestionIndex = 0;
   int _score = 0;
   Timer? _timer;
   int _timeRemaining = 60;
+  late List<Question> _questions;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _startTimer();
+    _fetchQuestions().then((questions) {
+      setState(() {
+        _questions = questions;
+        _isLoading = false;
+      });
+      _startTimer();
+    });
+  }
+
+  Future<List<Question>> _fetchQuestions() async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('questions')
+        .doc(widget.category)
+        .get();
+    if (querySnapshot.exists) {
+      final data = querySnapshot.data();
+      final questionsData = data?['questions'] as List<dynamic>?;
+      return questionsData
+              ?.map((q) => Question.fromMap(q, q['id'] ?? ''))
+              .toList() ??
+          [];
+    } else {
+      return [];
+    }
   }
 
   void _startTimer() {
@@ -70,13 +109,14 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void _selectOption(int index) {
     if (index == _questions[_currentQuestionIndex].answerIndex) {
-      _score += 10; // Assuming each question is worth 10 points
+      _score += 10;
     }
     _nextQuestion();
   }
 
-Future<void> _updatePoints(int score) async {
-    final userDoc = FirebaseFirestore.instance.collection('users').doc(widget.user.uid);
+  Future<void> _updatePoints(int score) async {
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(widget.user.uid);
     final doc = await userDoc.get();
     if (doc.exists) {
       int currentPoints = doc['points'] ?? 0;
@@ -92,20 +132,31 @@ Future<void> _updatePoints(int score) async {
         MaterialPageRoute(
           builder: (context) => ResultScreen(
             score: _score,
-            userName: widget.userName, userId: widget.user.uid,
+            userName: widget.userName,
+            userId: widget.user.uid,
           ),
         ),
       );
     });
   }
- 
+
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Quiz'),
+        ),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
     final question = _questions[_currentQuestionIndex];
     final optionsLabels = ['A', 'B', 'C', 'D'];
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Quiz'),
+        title: Text(widget.category),
       ),
       body: Column(
         children: [
@@ -119,7 +170,6 @@ Future<void> _updatePoints(int score) async {
                     Row(
                       children: [
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text('Question',
@@ -137,7 +187,8 @@ Future<void> _updatePoints(int score) async {
                                         fontWeight: FontWeight.bold)),
                                 Text('/${_questions.length}',
                                     style: const TextStyle(
-                                        fontSize: 24, fontWeight: FontWeight.bold)),
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold)),
                               ],
                             )
                           ],
@@ -236,11 +287,9 @@ Future<void> _updatePoints(int score) async {
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.black,
-                              backgroundColor: Colors.white, // Text color
-                              minimumSize: const Size(double.infinity,
-                                  50), // Make buttons fill width and have a height of 50
-                              alignment:
-                                  Alignment.centerLeft, // Align text to the left
+                              backgroundColor: Colors.white,
+                              minimumSize: const Size(double.infinity, 50),
+                              alignment: Alignment.centerLeft,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
@@ -263,23 +312,22 @@ Future<void> _updatePoints(int score) async {
                       }),
                     ),
                     const SizedBox(height: 20),
-                
                   ],
                 ),
               ),
             ),
           ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Center( 
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xff2100a6)),
-                          onPressed: _nextQuestion,
-                          child: const Text('Next'),
-                        ),
-                      ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff2100a6)),
+                onPressed: _nextQuestion,
+                child: const Text('Next'),
               ),
+            ),
+          ),
         ],
       ),
     );
@@ -287,33 +335,37 @@ Future<void> _updatePoints(int score) async {
 }
 
 class ResultScreen extends StatefulWidget {
- final int score;
+  final int score;
   final String userId;
   final String? userName;
 
-  const ResultScreen({super.key, required this.score, required this.userId, required this.userName});
-
-  
+  const ResultScreen(
+      {super.key,
+      required this.score,
+      required this.userId,
+      required this.userName});
 
   @override
   State<ResultScreen> createState() => _ResultScreenState();
 }
 
 class _ResultScreenState extends State<ResultScreen> {
-
-   int _points = 0;
+  int _points = 0;
   Future<int> _fetchPoints() async {
-    final doc = await FirebaseFirestore.instance.collection('users').doc(widget.userId).get();
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.userId)
+        .get();
     if (doc.exists) {
       setState(() {
         _points = doc['points'] ?? 0;
       });
-  
-  }
+    }
     return 0;
   }
+
   @override
-Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     _fetchPoints();
     return Scaffold(
       body: Center(
@@ -339,7 +391,8 @@ Widget build(BuildContext context) {
                   children: [
                     const Text(
                       'Your score ',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       '${widget.score} points',
@@ -365,39 +418,39 @@ Widget build(BuildContext context) {
                 ),
                 const SizedBox(height: 20),
                 Container(
-                        width: 80,
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: const Color.fromARGB(255, 219, 219, 219),
-                          ),
-                          color: const Color.fromARGB(255, 248, 248, 248),
-                          borderRadius: BorderRadius.circular(13),
+                  width: 80,
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: const Color.fromARGB(255, 219, 219, 219),
+                    ),
+                    color: const Color.fromARGB(255, 248, 248, 248),
+                    borderRadius: BorderRadius.circular(13),
+                  ),
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 5),
+                      const CircleAvatar(
+                        backgroundColor: Color(0xffFBDEF8),
+                        radius: 14,
+                        child: Icon(
+                          Icons.diamond,
+                          color: Color(0xffE21FD0),
+                          size: 21,
                         ),
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 5),
-                            const CircleAvatar(
-                              backgroundColor: Color(0xffFBDEF8),
-                              radius: 14,
-                              child: Icon(
-                                Icons.diamond,
-                                color: Color(0xffE21FD0),
-                                size: 21,
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              '$_points',
-                              style: const TextStyle(
-                                color: Color(0xff2100a6),
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        '$_points',
+                        style: const TextStyle(
+                          color: Color(0xff2100a6),
+                          fontWeight: FontWeight.w500,
                         ),
-            ),
-                 const SizedBox(height: 40),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 40),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff2100a6)),
@@ -406,22 +459,11 @@ Widget build(BuildContext context) {
                   },
                   child: const Text('Back to Home'),
                 ),
-            ],
+              ],
             ),
           ),
         ),
       ),
     );
   }
-}
-
-
- 
-class Question {
-  final String text;
-  final List<String> options;
-  final int answerIndex;
-
-  Question(
-      {required this.text, required this.options, required this.answerIndex});
 }
