@@ -55,14 +55,14 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
+    _updateQuizStatus(widget.user, 'Aptitude', 'not_started', 0);
     _fetchUserName();
     _connectivityService.initialize(context);
   }
 
   @override
   void dispose() {
-    _connectivityService.dispose(); // Dispose the connectivity service
+    _connectivityService.dispose();
     super.dispose();
   }
 
@@ -111,15 +111,13 @@ class _HomePageState extends State<HomePage> {
                 child: Icon(Icons.person, size: 50, color: Colors.white),
               ),
             ),
-            Expanded(
-              child: ListTile(
-                leading: const Icon(Icons.logout),
-                title: const Text('Logout'),
-                onTap: () {
-                  FirebaseAuth.instance.signOut();
-                  Navigator.pop(context); // Close the drawer
-                },
-              ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
+              onTap: () {
+                FirebaseAuth.instance.signOut();
+                Navigator.pop(context);
+              },
             ),
             ListTile(
               title: const Text(
@@ -304,17 +302,6 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         onPressed: () {
-//       FirebaseFirestore.instance.collection('questions').get().then((querySnapshot) {
-//   querySnapshot.docs.forEach((doc) {
-//     if (kDebugMode) {
-//       print(doc.data());
-//     }
-//   });
-// });
-
-// if (kDebugMode) {
-//   print(FirebaseFirestore.instance.collection('questions').toString());
-// }
                           //             Navigator.push(
                           //                 context,
                           //                 MaterialPageRoute(
@@ -364,89 +351,7 @@ class _HomePageState extends State<HomePage> {
             style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16.0),
-          Column(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  //     Navigator.push(
-                  //         context,
-                  //         MaterialPageRoute(
-                  //             builder: (context) => QuizScreen(
-                  //                   userName: _userName,
-                  //                   user: widget.user,
-                  //                 ))).then((_) {
-                  //   _fetchUserName();
-                  // });
-                },
-                child: const QuizCard(
-                  title: 'History Quiz',
-                  questions: '10 questions',
-                  status: 'Completed',
-                  iconData: Icons.history,
-                  statusColor: Colors.green,
-                ),
-              ),
-              //   GestureDetector(
-              //     onTap: () {
-              //       Navigator.push(
-              //           context,
-              //           MaterialPageRoute(
-              //               builder: (context) => QuizScreen(
-              //                     userName: _userName,
-              //                     user: widget.user,
-              //                   ))).then((_) {
-              //     _fetchUserName();
-              //   });
-              //     },
-              //     child: const QuizCard(
-              //       title: 'Science Quiz',
-              //       questions: '8 questions',
-              //       status: 'In Progress',
-              //       iconData: Icons.science,
-              //       statusColor: Colors.orange,
-              //     ),
-              //   ),
-              //   GestureDetector(
-              //       onTap: () {
-              //         Navigator.push(
-              //             context,
-              //             MaterialPageRoute(
-              //                 builder: (context) => QuizScreen(
-              //                       userName: _userName,
-              //                       user: widget.user,
-              //                     ))).then((_) {
-              //     _fetchUserName();
-              //   });
-              //       },
-              //       child: const QuizCard(
-              //         title: 'Sports Quiz',
-              //         questions: '12 questions',
-              //         status: 'Completed',
-              //         iconData: Icons.sports_soccer,
-              //         statusColor: Colors.green,
-              //       )),
-              //   GestureDetector(
-              //     onTap: () {
-              //       Navigator.push(
-              //           context,
-              //           MaterialPageRoute(
-              //               builder: (context) => QuizScreen(
-              //                     userName: _userName,
-              //                     user: widget.user,
-              //                   ))).then((_) {
-              //     _fetchUserName();
-              //   });
-              //     },
-              //     child: const QuizCard(
-              //       title: 'Music Quiz',
-              //       questions: '15 questions',
-              //       status: 'In Progress',
-              //       iconData: Icons.music_note,
-              //       statusColor: Colors.orange,
-              //     ),
-              //   )
-            ],
-          ),
+          SizedBox(height: 300, child: RecentSection(user: widget.user)),
         ])),
       ),
     ));
@@ -455,7 +360,7 @@ class _HomePageState extends State<HomePage> {
 
 class QuizCard extends StatelessWidget {
   final String title;
-  final String questions;
+  final int questions;
   final String status;
   final IconData iconData;
   final Color statusColor;
@@ -482,7 +387,8 @@ class QuizCard extends StatelessWidget {
           children: [
             CircleAvatar(
               backgroundColor: Colors.grey.shade200,
-              child: Icon(iconData, size: 30, color: Colors.grey.shade800),
+              child: Icon(iconData,
+                  size: 30, color: const Color.fromARGB(255, 107, 107, 107)),
             ),
             const SizedBox(width: 16.0),
             Expanded(
@@ -498,7 +404,7 @@ class QuizCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4.0),
                   Text(
-                    questions,
+                    '$questions  questions answered',
                     style: const TextStyle(
                       fontSize: 12.0,
                       color: Colors.grey,
@@ -599,6 +505,128 @@ class CategoryCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+Future<void> _updateQuizStatus(
+    User user, String quizId, String status, int currentQuestionIndex) async {
+  final userQuizStatusDoc = FirebaseFirestore.instance
+      .collection('users')
+      .doc(user.uid)
+      .collection('userQuizStatus')
+      .doc(quizId);
+
+  await userQuizStatusDoc.set({
+    'quizId': quizId,
+    'status': status,
+    'currentQuestionIndex': 0,
+  });
+}
+
+Future<List<QuizStatus>> fetchUserQuizStatuses(User user) async {
+  final querySnapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(user.uid)
+      .collection('userQuizStatus')
+      .get();
+
+  final quizStatuses = querySnapshot.docs.map((doc) {
+    final data = doc.data();
+    return QuizStatus(
+      quizId: data['quizId'],
+      status: data['status'],
+      currentQuestionIndex: data['currentQuestionIndex'],
+    );
+  }).toList();
+
+  return quizStatuses;
+}
+
+class QuizStatus {
+  final String quizId;
+  final String status;
+  final int currentQuestionIndex;
+
+  QuizStatus({
+    required this.quizId,
+    required this.status,
+    required this.currentQuestionIndex,
+  });
+}
+
+class RecentSection extends StatelessWidget {
+  final User user;
+
+  const RecentSection({super.key, required this.user});
+
+  IconData getCategoryIcon(String categoryName) {
+    switch (categoryName) {
+      case 'Java':
+        return Icons.computer;
+      case 'Python':
+        return Icons.code;
+      case 'Aptitude':
+        return Icons.calculate;
+      default:
+        return Icons.category;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<QuizStatus>>(
+      future: fetchUserQuizStatuses(user),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(child: Text('No recent quizzes found'));
+        }
+
+        final quizStatuses = snapshot.data!;
+        return ListView.builder(
+          itemCount: quizStatuses.length,
+          itemBuilder: (context, index) {
+            final quizStatus = quizStatuses[index];
+            String statusText;
+            Color statusColor;
+            int questions;
+
+            switch (quizStatus.status) {
+              case 'not_started':
+                statusText = 'Get Started';
+                statusColor = Colors.blue;
+                questions = 0;
+                break;
+              case 'in_progress':
+                statusText = 'In Progress';
+                statusColor = Colors.orange;
+                questions = quizStatus.currentQuestionIndex + 1;
+                break;
+              case 'completed':
+                statusText = 'Completed';
+                statusColor = Colors.green;
+                questions = quizStatus.currentQuestionIndex + 1;
+                break;
+              default:
+                statusText = 'Unknown';
+                statusColor = Colors.grey;
+                questions = 0;
+            }
+
+            return QuizCard(
+              title: quizStatus.quizId,
+              status: statusText,
+              statusColor: statusColor,
+              questions: questions,
+              iconData: getCategoryIcon(quizStatus.quizId),
+            );
+          },
+        );
+      },
     );
   }
 }

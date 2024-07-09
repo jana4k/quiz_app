@@ -63,6 +63,23 @@ class _QuizScreenState extends State<QuizScreen> {
       });
       _startTimer();
     });
+    _updateQuizStatus(
+        widget.user, widget.category, 'in_progress', _currentQuestionIndex);
+  }
+
+  Future<void> _updateQuizStatus(
+      User user, String quizId, String status, int currentQuestionIndex) async {
+    final userQuizStatusDoc = FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('userQuizStatus')
+        .doc(quizId);
+
+    await userQuizStatusDoc.set({
+      'quizId': quizId,
+      'status': status,
+      'currentQuestionIndex': _currentQuestionIndex,
+    });
   }
 
   Future<List<Question>> _fetchQuestions() async {
@@ -94,18 +111,21 @@ class _QuizScreenState extends State<QuizScreen> {
     });
   }
 
-  void _nextQuestion() {
-    _timer?.cancel();
-    if (_currentQuestionIndex < _questions.length - 1) {
-      setState(() {
-        _currentQuestionIndex++;
-        _timeRemaining = 60;
-        _startTimer();
-      });
-    } else {
-      _showResults();
-    }
+ void _nextQuestion() {
+  _timer?.cancel();
+  if (_currentQuestionIndex < _questions.length - 1) {
+    setState(() {
+      _currentQuestionIndex++;
+      _timeRemaining = 60;
+      _startTimer();
+    });
+    _updateQuizStatus(widget.user, widget.category, 'in_progress', _currentQuestionIndex);
+  } else {
+    _updateQuizStatus(widget.user, widget.category, 'completed', _questions.length);
+    _showResults();
   }
+}
+
 
   void _selectOption(int index) {
     if (index == _questions[_currentQuestionIndex].answerIndex) {
@@ -126,7 +146,9 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void _showResults() {
     _timer?.cancel();
+   _updateQuizStatus(widget.user, widget.category, 'completed',_currentQuestionIndex=0);
     _updatePoints(_score).then((_) {
+   
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

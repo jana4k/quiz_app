@@ -113,6 +113,7 @@ class _loginPageState extends State<loginPage> {
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text('Login successful')));
       } else {
+        LoadingDialog.hide(context);
         String error = AuthExceptionHandler.generateExceptionMessage(status);
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(error)));
