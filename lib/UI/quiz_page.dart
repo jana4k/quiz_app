@@ -5,18 +5,22 @@ import 'dart:async';
 
 import 'package:lottie/lottie.dart';
 
+
 class Question {
   final String id;
   final String text;
   final List<String> options;
   final int answerIndex;
+  final String? image;
 
   Question({
     required this.id,
     required this.text,
     required this.options,
     required this.answerIndex,
+    this.image,
   });
+  
 
   // Create a factory method to convert a Map into a Question object
   factory Question.fromMap(Map<String, dynamic> map, String id) {
@@ -25,6 +29,7 @@ class Question {
       text: map['text'] ?? '',
       options: List<String>.from(map['options'] ?? []),
       answerIndex: map['answerIndex'] ?? 0,
+      image: map['image'] as String?,
     );
   }
 }
@@ -111,21 +116,22 @@ class _QuizScreenState extends State<QuizScreen> {
     });
   }
 
- void _nextQuestion() {
-  _timer?.cancel();
-  if (_currentQuestionIndex < _questions.length - 1) {
-    setState(() {
-      _currentQuestionIndex++;
-      _timeRemaining = 60;
-      _startTimer();
-    });
-    _updateQuizStatus(widget.user, widget.category, 'in_progress', _currentQuestionIndex);
-  } else {
-    _updateQuizStatus(widget.user, widget.category, 'completed', _questions.length);
-    _showResults();
+  void _nextQuestion() {
+    _timer?.cancel();
+    if (_currentQuestionIndex < _questions.length - 1) {
+      setState(() {
+        _currentQuestionIndex++;
+        _timeRemaining = 60;
+        _startTimer();
+      });
+      _updateQuizStatus(
+          widget.user, widget.category, 'in_progress', _currentQuestionIndex);
+    } else {
+      _updateQuizStatus(
+          widget.user, widget.category, 'completed', _questions.length);
+      _showResults();
+    }
   }
-}
-
 
   void _selectOption(int index) {
     if (index == _questions[_currentQuestionIndex].answerIndex) {
@@ -146,9 +152,9 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void _showResults() {
     _timer?.cancel();
-   _updateQuizStatus(widget.user, widget.category, 'completed',_currentQuestionIndex=0);
+    _updateQuizStatus(
+        widget.user, widget.category, 'completed', _currentQuestionIndex = 0);
     _updatePoints(_score).then((_) {
-   
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -174,7 +180,7 @@ class _QuizScreenState extends State<QuizScreen> {
     }
 
     final question = _questions[_currentQuestionIndex];
-    final optionsLabels = ['A', 'B', 'C', 'D'];
+    final optionsLabels = ['A', 'B', 'C', 'D', 'E'];
 
     return Scaffold(
       appBar: AppBar(
@@ -278,10 +284,15 @@ class _QuizScreenState extends State<QuizScreen> {
                                         ),
                                       ],
                                     ),
-                                  ))
+                                  )),
+                                
                                 ],
                               ),
-                              const SizedBox(height: 10),
+                            
+                                if (question.image != null)
+                                    Container(
+                                                                          child: Image.network(question.image!),
+                                                                        ),  const SizedBox(height: 10),
                             ],
                           ),
                         ),
@@ -440,7 +451,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 ),
                 const SizedBox(height: 20),
                 Container(
-                  width: 80,
+                  width: 85,
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     border: Border.all(

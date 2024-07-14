@@ -32,6 +32,7 @@ class _SignupPageState extends State<SignupPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Signup successful')),
         );
+        
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -62,7 +63,7 @@ class _SignupPageState extends State<SignupPage> {
               style:
                   TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
           centerTitle: true,
-          backgroundColor: const Color(0xff2100a6),
+          backgroundColor:  Colors.blueAccent,
         ),
         body: Form(
           key: _formKey,
@@ -85,7 +86,7 @@ class _SignupPageState extends State<SignupPage> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: const Color(0xff2100a6),
+                                color: Colors.blueAccent,
                                 width: 4.0,
                               ),
                             ),
@@ -99,7 +100,7 @@ class _SignupPageState extends State<SignupPage> {
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xff2100a6),
+                        color: Colors.blueAccent,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -131,7 +132,7 @@ class _SignupPageState extends State<SignupPage> {
                       icon: const Icon(Icons.check),
                       label: const Text('Sign Up'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xff2100a6),
+                        backgroundColor: Colors.blueAccent,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 30, vertical: 15),
                         textStyle: const TextStyle(fontSize: 18),
@@ -148,7 +149,7 @@ class _SignupPageState extends State<SignupPage> {
                       child: const Text(
                         'Already have an account? Login',
                         style: TextStyle(
-                            color: Color(0xff2100a6),
+                            color:Colors.blueAccent,
                             fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -179,19 +180,19 @@ class _SignupPageState extends State<SignupPage> {
       obscureText: obscureText,
       decoration: InputDecoration(
         labelText: labelText,
-        prefixIcon: Icon(icon, color: const Color(0xff2100a6)),
+        prefixIcon: Icon(icon, color: Colors.lightBlue),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(color: Color(0xff2100a6)),
+          borderSide: const BorderSide(color:Colors.blueAccent),
         ),
-        labelStyle: const TextStyle(color: Color(0xff2100a6)),
+        labelStyle: const TextStyle(color:Colors.blueAccent),
       ),
     );
   }
-
+ 
   @override
   void dispose() {
     _nameController.dispose();

@@ -21,7 +21,12 @@ class _loginPageState extends State<loginPage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Login'),
+          automaticallyImplyLeading: false,
+          title: const Text('Login',
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+          centerTitle: true,
+          backgroundColor:  Colors.blueAccent,
         ),
         body: Form(
           key: _formKey,
@@ -32,65 +37,80 @@ class _loginPageState extends State<loginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage: const AssetImage(
-                          'assets/images/file.jpg'), // Add your logo image in the assets folder
-                      backgroundColor: Colors.transparent,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.blue,
-                            width: 4.0,
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundImage: const AssetImage(
+                              'assets/images/file.jpg'), // Add your logo image in the assets folder
+                          backgroundColor: Colors.transparent,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.blueAccent,
+                                width: 4.0,
+                              ),
+                            ),
                           ),
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: 30),
+                    const Text(
+                      'Join the Quiz!',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blueAccent,
                       ),
                     ),
+                 
+                 
                     const SizedBox(height: 20),
-                    TextFormField(
-                      validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        return null;
-                      },
+                    _buildTextField(
                       controller: _emailController,
-                      decoration: const InputDecoration(labelText: 'Email'),
+                      labelText: 'Email',
+                      icon: Icons.email,
                     ),
                     const SizedBox(height: 20),
-                    TextFormField(
-                      validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return 'Please enter your Password';
-                        }
-                        return null;
-                      },
+                    _buildTextField(
                       controller: _passwordController,
-                      decoration: const InputDecoration(labelText: 'Password'),
+                      labelText: 'Password',
+                      icon: Icons.lock,
                       obscureText: true,
                     ),
                     const SizedBox(height: 20),
-                    ElevatedButton(
+                    ElevatedButton.icon(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           _login();
                         }
                       },
+                      icon: const Icon(Icons.check),
+                      label: const Text('Login'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: Colors.blueAccent,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 15),
+                        textStyle: const TextStyle(fontSize: 18),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
                       ),
-                      child: const Text('Login'),
                     ),
+                    const SizedBox(height: 20),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SignupPage()),
-                        );
+                       Navigator.push(context, MaterialPageRoute(builder:  (context) => const SignupPage()));
                       },
-                      child: const Text('Don\'t have an account? Sign up'),
+                      child: const Text(
+                        'Don`t have an account? Sign up',
+                        style: TextStyle(
+                            color:Colors.blueAccent,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ],
                 ),
@@ -102,6 +122,37 @@ class _loginPageState extends State<loginPage> {
     );
   }
 
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String labelText,
+    required IconData icon,
+    bool obscureText = false,
+  }) {
+    return TextFormField(
+      validator: (text) {
+        if (text == null || text.isEmpty) {
+          return 'Please enter your $labelText';
+        }
+        return null;
+      },
+      controller: controller,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+        fillColor: Colors.blueAccent,
+        labelText: labelText,
+        prefixIcon: Icon(icon, color: Colors.lightBlue),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: const BorderSide(color:Colors.blueAccent),
+        ),
+        labelStyle: const TextStyle(color:Colors.blueAccent),
+      ),
+    );
+  }
+ 
   void _login() {
     LoadingDialog.show(context);
     AuthService()
@@ -109,9 +160,10 @@ class _loginPageState extends State<loginPage> {
             email: _emailController.text, password: _passwordController.text)
         .then((status) {
       if (status == AuthResultStatus.successful) {
-        LoadingDialog.hide(context);
+     
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text('Login successful')));
+               LoadingDialog.hide(context);
       } else {
         LoadingDialog.hide(context);
         String error = AuthExceptionHandler.generateExceptionMessage(status);

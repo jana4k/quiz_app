@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'dart:ui' as ui;
 
 import 'package:myapp/UI/quiz_page.dart';
+// import 'package:myapp/models/question.dart';
 
 import 'package:myapp/widgets/loading_dialog.dart';
 
@@ -215,7 +216,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(5),
         child: SingleChildScrollView(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -302,15 +303,19 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         onPressed: () {
-                          //             Navigator.push(
-                          //                 context,
-                          //                 MaterialPageRoute(
-                          //                     builder: (context) => QuizScreen(
-                          //                           userName: _userName,
-                          //                           user: widget.user,
-                          //                         ))).then((_) {
-                          //   _fetchUserName();
-                          // });
+                          //  addQuestionsToFirestore();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => QuizScreen(
+                                userName: _userName,
+                                user: widget.user,
+                                category: 'Aptitude',
+                              ),
+                            ),
+                          ).then((_) {
+                            _fetchUserName();
+                          });
                         },
                         child: const Row(
                           mainAxisSize: MainAxisSize.min,
@@ -351,7 +356,7 @@ class _HomePageState extends State<HomePage> {
             style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16.0),
-          SizedBox(height: 300, child: RecentSection(user: widget.user)),
+          SizedBox(height: 250, child: RecentSection(user: widget.user)),
         ])),
       ),
     ));
@@ -403,13 +408,30 @@ class QuizCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4.0),
-                  Text(
-                    '$questions  questions answered',
-                    style: const TextStyle(
-                      fontSize: 12.0,
-                      color: Colors.grey,
+                  if (statusColor == Colors.orange)
+                    Text(
+                      '$questions questions answered',
+                      style: const TextStyle(
+                        fontSize: 12.0,
+                        color: Colors.grey,
+                      ),
                     ),
-                  ),
+                  if (statusColor == Colors.green)
+                    const Text(
+                      'you have completed this Quiz!',
+                      style: TextStyle(
+                        fontSize: 12.0,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  if (statusColor == Colors.blue)
+                    const Text(
+                      'Join This Quiz!',
+                      style: TextStyle(
+                        fontSize: 12.0,
+                        color: Colors.grey,
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -559,7 +581,6 @@ class RecentSection extends StatelessWidget {
   final User user;
 
   const RecentSection({super.key, required this.user});
-
   IconData getCategoryIcon(String categoryName) {
     switch (categoryName) {
       case 'Java':
@@ -568,6 +589,8 @@ class RecentSection extends StatelessWidget {
         return Icons.code;
       case 'Aptitude':
         return Icons.calculate;
+      case 'CyberSecurity':
+        return Icons.security_sharp;
       default:
         return Icons.category;
     }
@@ -609,7 +632,7 @@ class RecentSection extends StatelessWidget {
               case 'completed':
                 statusText = 'Completed';
                 statusColor = Colors.green;
-                questions = quizStatus.currentQuestionIndex + 1;
+                questions = 0;
                 break;
               default:
                 statusText = 'Unknown';
@@ -643,6 +666,8 @@ class CategoryList extends StatelessWidget {
         return Icons.code;
       case 'Aptitude':
         return Icons.calculate;
+      case 'CyberSecurity':
+        return Icons.security_sharp;
       default:
         return Icons.category;
     }
