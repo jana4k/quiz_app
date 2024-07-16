@@ -595,6 +595,8 @@ class RecentSection extends StatelessWidget {
         return Icons.javascript;
           case 'HTML-and-CSS':
         return Icons.web;  
+        case 'Database':
+        return Icons.data_object;
       default:
         return Icons.category;
     }
@@ -676,6 +678,8 @@ class CategoryList extends StatelessWidget {
         return Icons.javascript;
           case 'HTML-and-CSS':
         return Icons.web;  
+         case 'Database':
+        return Icons.data_object;
       default:
         return Icons.category;
     }
