@@ -216,7 +216,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(3),
         child: SingleChildScrollView(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -356,7 +356,7 @@ class _HomePageState extends State<HomePage> {
             style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16.0),
-          SizedBox(height: 250, child: RecentSection(user: widget.user)),
+          SizedBox(height: 300, child: RecentSection(user: widget.user)),
         ])),
       ),
     ));
@@ -583,7 +583,7 @@ class RecentSection extends StatelessWidget {
   const RecentSection({super.key, required this.user});
   IconData getCategoryIcon(String categoryName) {
     switch (categoryName) {
-      case 'Java':
+        case 'Java':
         return Icons.computer;
       case 'Python':
         return Icons.code;
@@ -591,6 +591,10 @@ class RecentSection extends StatelessWidget {
         return Icons.calculate;
       case 'CyberSecurity':
         return Icons.security_sharp;
+        case 'JavaScript':
+        return Icons.javascript;
+          case 'HTML-and-CSS':
+        return Icons.web;  
       default:
         return Icons.category;
     }
@@ -668,6 +672,10 @@ class CategoryList extends StatelessWidget {
         return Icons.calculate;
       case 'CyberSecurity':
         return Icons.security_sharp;
+        case 'JavaScript':
+        return Icons.javascript;
+          case 'HTML-and-CSS':
+        return Icons.web;  
       default:
         return Icons.category;
     }
