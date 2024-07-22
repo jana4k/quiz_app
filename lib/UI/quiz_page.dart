@@ -490,7 +490,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   onPressed: () {
                     Navigator.popUntil(context, (route) => route.isFirst);
                   },
-                  child: const Text('Back to Home'),
+                  child: const Text('Are you sure want to exit?'),
                 ),
               ],
             ),

@@ -56,7 +56,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _updateQuizStatus(widget.user, 'Aptitude', 'not_started', 0);
     _fetchUserName();
     _connectivityService.initialize(context);
   }
@@ -277,7 +276,7 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Start Quiz',
+                        'Join the Quiz',
                         style: TextStyle(
                           fontSize: 24.0,
                           color: Colors.white,
@@ -286,7 +285,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const SizedBox(height: 8.0),
                       const Text(
-                        'Play and Win',
+                        'Aptitude Quiz',
                         style: TextStyle(color: Colors.white),
                       ),
                       const SizedBox(height: 16.0),
@@ -302,20 +301,31 @@ class _HomePageState extends State<HomePage> {
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           //  addQuestionsToFirestore();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => QuizScreen(
-                                userName: _userName,
-                                user: widget.user,
-                                category: 'Aptitude',
+                          final quizStatus =
+                              await _fetchQuizStatus(widget.user, 'Aptitude');
+                          if (quizStatus == 'not_started' ||
+                              quizStatus == 'in_progress') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => QuizScreen(
+                                  userName: _userName,
+                                  user: widget.user,
+                                  category: 'Aptitude',
+                                ),
                               ),
-                            ),
-                          ).then((_) {
-                            _fetchUserName();
-                          });
+                            ).then((_) {
+                              _fetchUserName();
+                            });
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('You have completed this Quiz!'),
+                              ),
+                            );
+                          }
                         },
                         child: const Row(
                           mainAxisSize: MainAxisSize.min,
@@ -361,6 +371,19 @@ class _HomePageState extends State<HomePage> {
       ),
     ));
   }
+}
+
+Future<String> _fetchQuizStatus(User user, String quizId) async {
+  final doc = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(user.uid)
+      .collection('userQuizStatus')
+      .doc(quizId)
+      .get();
+  if (doc.exists) {
+    return doc['status'];
+  }
+  return 'not_started';
 }
 
 class QuizCard extends StatelessWidget {
@@ -581,9 +604,10 @@ class RecentSection extends StatelessWidget {
   final User user;
 
   const RecentSection({super.key, required this.user});
+
   IconData getCategoryIcon(String categoryName) {
     switch (categoryName) {
-        case 'Java':
+      case 'Java':
         return Icons.computer;
       case 'Python':
         return Icons.code;
@@ -591,11 +615,11 @@ class RecentSection extends StatelessWidget {
         return Icons.calculate;
       case 'CyberSecurity':
         return Icons.security_sharp;
-        case 'JavaScript':
+      case 'JavaScript':
         return Icons.javascript;
-          case 'HTML-and-CSS':
-        return Icons.web;  
-        case 'Database':
+      case 'HTML-and-CSS':
+        return Icons.web;
+      case 'Database':
         return Icons.data_object;
       default:
         return Icons.category;
@@ -612,7 +636,17 @@ class RecentSection extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('No recent quizzes found'));
+          return ListView.builder(
+              itemCount: 1,
+              itemBuilder: (context, index) {
+                return QuizCard(
+                  title: 'Aptitude',
+                  status: 'Get Started',
+                  statusColor: Colors.blue,
+                  questions: 0,
+                  iconData: getCategoryIcon('Aptitude'),
+                );
+              });
         }
 
         final quizStatuses = snapshot.data!;
@@ -664,6 +698,7 @@ class CategoryList extends StatelessWidget {
   final Function(String) onCategorySelected;
 
   const CategoryList({super.key, required this.onCategorySelected});
+
   IconData getCategoryIcon(String categoryName) {
     switch (categoryName) {
       case 'Java':
@@ -674,19 +709,34 @@ class CategoryList extends StatelessWidget {
         return Icons.calculate;
       case 'CyberSecurity':
         return Icons.security_sharp;
-        case 'JavaScript':
+      case 'JavaScript':
         return Icons.javascript;
-          case 'HTML-and-CSS':
-        return Icons.web;  
-         case 'Database':
+      case 'HTML-and-CSS':
+        return Icons.web;
+      case 'Database':
         return Icons.data_object;
       default:
         return Icons.category;
     }
   }
 
+  Future<String> _fetchQuizStatus(User user, String quizId) async {
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('userQuizStatus')
+        .doc(quizId)
+        .get();
+    if (doc.exists) {
+      return doc['status'];
+    }
+    return 'not_started';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final User user = FirebaseAuth.instance.currentUser!;
+
     return FutureBuilder<List<Category>>(
       future: fetchCategories(),
       builder: (context, snapshot) {
@@ -706,7 +756,19 @@ class CategoryList extends StatelessWidget {
               return CategoryCard(
                 title: category.name,
                 icon: getCategoryIcon(category.name),
-                onTap: () => onCategorySelected(category.id),
+                onTap: () async {
+                  final quizStatus = await _fetchQuizStatus(user, category.id);
+                  if (quizStatus == 'not_started' ||
+                      quizStatus == 'in_progress') {
+                    onCategorySelected(category.id);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('You have completed this Quiz!'),
+                      ),
+                    );
+                  }
+                },
               );
             }).toList(),
           ),
