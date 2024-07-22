@@ -66,19 +66,27 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  void _onCategorySelected(BuildContext context, String category) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => QuizScreen(
-          userName: _userName,
-          user: widget.user,
-          category: category,
+  void _onCategorySelected(BuildContext context, String category) async {
+    if (await _showAccessCodeDialog(context)) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => QuizScreen(
+            userName: _userName,
+            user: widget.user,
+            category: category,
+          ),
         ),
-      ),
-    ).then((_) {
-      _fetchUserName();
-    });
+      ).then((_) {
+        _fetchUserName();
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Incorrect access code.'),
+        ),
+      );
+    }
   }
 
   Future<void> _fetchUserName() async {
@@ -305,7 +313,9 @@ class _HomePageState extends State<HomePage> {
                           //  addQuestionsToFirestore();
                           final quizStatus =
                               await _fetchQuizStatus(widget.user, 'Aptitude');
-                          if (quizStatus == 'not_started' ||
+                          if (await _showAccessCodeDialog(
+                              context)) if (quizStatus ==
+                                  'not_started' ||
                               quizStatus == 'in_progress') {
                             Navigator.push(
                               context,
@@ -323,6 +333,13 @@ class _HomePageState extends State<HomePage> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('You have completed this Quiz!'),
+                              ),
+                            );
+                          }
+                          else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Incorrect access code.'),
                               ),
                             );
                           }
@@ -692,6 +709,59 @@ class RecentSection extends StatelessWidget {
       },
     );
   }
+}
+
+Future<String> fetchAccessCode() async {
+  final doc = await FirebaseFirestore.instance
+      .collection('accessCode')
+      .doc('code')
+      .get();
+  if (doc.exists) {
+    return doc['password'];
+  }
+  return '';
+}
+
+Future<bool> _showAccessCodeDialog(BuildContext context) async {
+  final TextEditingController codeController = TextEditingController();
+  bool isCodeCorrect = false;
+
+  final String correctCode = await fetchAccessCode();
+
+  await showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Enter Access Code'),
+        content: TextField(
+          controller: codeController,
+          keyboardType: TextInputType.number,
+          obscureText: true,
+          decoration: const InputDecoration(hintText: '4-digit code'),
+          maxLength: 4,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              if (codeController.text == correctCode) {
+                isCodeCorrect = true;
+              }
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+
+  return isCodeCorrect;
 }
 
 class CategoryList extends StatelessWidget {

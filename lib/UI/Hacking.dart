@@ -99,11 +99,12 @@ class _EthicalHackingState extends State<EthicalHacking>     with SingleTickerPr
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 30),
-                          child: TabBar(
+                          child: TabBar(                     
                             controller: _tabController,
                             labelColor: Colors.black,
                             unselectedLabelColor: Colors.black54,
                             indicatorColor: Colors.black,
+                               dividerColor: Colors.white,
                             tabs: const [
                               Tab(text: 'Syllabus'),
                               Tab(text: 'Benefits'),

@@ -103,6 +103,7 @@ class _FullStackState extends State<FullStack>
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 30),
                           child: TabBar(
+                            dividerColor: Colors.white,
                             controller: _tabController,
                             labelColor: Colors.black,
                             unselectedLabelColor: Colors.black54,
@@ -115,7 +116,7 @@ class _FullStackState extends State<FullStack>
                         ),
                         const SizedBox(height: 16),
                         SizedBox(
-                          height: 500, // Set a fixed height for TabBarView
+                          height: 500, 
                           child: TabBarView(
                             controller: _tabController,
                             children: const [

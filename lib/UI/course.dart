@@ -113,7 +113,7 @@ class _CoursePageState extends State<CoursePage> {
                     child: Column(
                       children: [
                         const SizedBox(
-                          height: 16,
+                          height: 24,
                         ),
                         const Padding(
                           padding: EdgeInsets.only(left: 30),
@@ -205,7 +205,10 @@ class _CoursePageState extends State<CoursePage> {
                               ),
                             ],
                           ),
-                        )
+                        ),
+                           const SizedBox(
+            height: 50,
+          ),
                       ],
                     ),
                   ),
@@ -224,8 +227,8 @@ class _CoursePageState extends State<CoursePage> {
     required List<Color> gradientColors,
   }) {
     return Container(
-      width: 180,
-      height: 300,
+      width: 220,
+      height: 330,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
         gradient: LinearGradient(
@@ -238,7 +241,7 @@ class _CoursePageState extends State<CoursePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(26.0),
+            padding: const EdgeInsets.all(24.0),
             child: Text(
               title,
               style: const TextStyle(
@@ -251,12 +254,15 @@ class _CoursePageState extends State<CoursePage> {
           const SizedBox(
             height: 16,
           ),
-          Image.asset(
-            imageUrl,
-            width: 180,
-            height: 150,
-            fit: BoxFit.cover,
+          Center(
+            child: Image.asset(
+              imageUrl,
+              width: 190,
+              height: 180,
+              fit: BoxFit.cover,
+            ),
           ),
+         
         ],
       ),
     );

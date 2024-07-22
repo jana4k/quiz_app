@@ -84,6 +84,7 @@ class _QuizScreenState extends State<QuizScreen> {
       'quizId': quizId,
       'status': status,
       'currentQuestionIndex': _currentQuestionIndex,
+      'marks': _score,
     });
   }
 

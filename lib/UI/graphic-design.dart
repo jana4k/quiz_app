@@ -99,7 +99,7 @@ class _GraphicDesignState extends State<GraphicDesign>     with SingleTickerProv
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 30),
-                          child: TabBar(
+                          child: TabBar(   dividerColor: Colors.white,
                             controller: _tabController,
                             labelColor: Colors.black,
                             unselectedLabelColor: Colors.black54,
