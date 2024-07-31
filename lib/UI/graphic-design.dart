@@ -7,7 +7,8 @@ class GraphicDesign extends StatefulWidget {
   State<GraphicDesign> createState() => _GraphicDesignState();
 }
 
-class _GraphicDesignState extends State<GraphicDesign>     with SingleTickerProviderStateMixin {
+class _GraphicDesignState extends State<GraphicDesign>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -21,17 +22,18 @@ class _GraphicDesignState extends State<GraphicDesign>     with SingleTickerProv
     _tabController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-  return Scaffold(
+    return Scaffold(
       body: SingleChildScrollView(
         child: Container(
           width: double.infinity,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                 const Color(0xffFFB75E),
-                                    const Color(0xffED8F03),
+                Color(0xffFFB75E),
+                Color(0xffED8F03),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -75,10 +77,10 @@ class _GraphicDesignState extends State<GraphicDesign>     with SingleTickerProv
                             fontSize: 28,
                           ),
                         ),
-                        SizedBox(height: 40),
+                        SizedBox(height: 30),
                         Text(
                             style: TextStyle(color: Colors.white),
-                            'Effective programmers excel by managing complex details that others might miss'),
+                            'Crafting visual stories that captivate and inspire.'),
                         SizedBox(height: 20),
                       ],
                     ),
@@ -99,7 +101,8 @@ class _GraphicDesignState extends State<GraphicDesign>     with SingleTickerProv
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 30),
-                          child: TabBar(   dividerColor: Colors.white,
+                          child: TabBar(
+                            dividerColor: Colors.white,
                             controller: _tabController,
                             labelColor: Colors.black,
                             unselectedLabelColor: Colors.black54,
@@ -115,31 +118,86 @@ class _GraphicDesignState extends State<GraphicDesign>     with SingleTickerProv
                           height: 500, // Set a fixed height for TabBarView
                           child: TabBarView(
                             controller: _tabController,
-                            children: const [
-                              SingleChildScrollView(
+                            children: [
+                           SingleChildScrollView(
                                 child: Padding(
-                                  padding: EdgeInsets.all(16.0),
+                                  padding: const EdgeInsets.all(16.0),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'Syllabus Content',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(height: 10),
-                                      // Text(
-                                      //   '1. Introduction to Full Stack Development\n2. Frontend Basics\n3. Backend Development\n4. Database Management\n5. Deployment\n6. Project Work',
-                                      //   style: TextStyle(fontSize: 16),
+                                      // const Text(
+                                      //   'Graphic Design Syllabus',
+                                      //   style: TextStyle(
+                                      //     fontSize: 18,
+                                      //     fontWeight: FontWeight.bold,
+                                      //   ),
                                       // ),
+                                      const SizedBox(height: 10),
+                                      _buildSyllabusModule(
+                                        'Module 1: Introduction to Graphic Design',
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 2: Graphic Designing Essentials',
+                                        subtopics: [
+                                          'Image Editing with Adobe Photoshop - Introduction',
+                                          'Basics of Images',
+                                          'Learning Colors',
+                                          'Working with Selection Tools',
+                                          'Working with Painting Tools and Brush Settings',
+                                          'More on Layers',
+                                          'Working with Texts',
+                                          'Digital Drawing with Photoshop',
+                                          'More on Colors - Channels',
+                                        ],
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 3: Advanced Tools for Image Manipulation',
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 4: Advanced Tools for Image Correction',
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 5: Working with Digital Photographs',
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 6: Illustrations with Adobe Illustrator - Introduction',
+                                        subtopics: [
+                                          'Basics of Adobe Illustrator',
+                                          'Navigating in Adobe Illustrator',
+                                          'Understanding Artboards',
+                                        ],
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 7: Working with Shapes',
+                                        subtopics: [
+                                          'Selecting, Combining and Aligning Shapes',
+                                          'Managing Shapes and Objects',
+                                          'Applying Transformations',
+                                          'Managing the Object Appearance',
+                                          'Saving and Exporting Swatches',
+                                          'Applying Effects',
+                                          'Working with Text',
+                                        ],
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 8: Working with Drawing Tools',
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 9: Managing Brushes for Advanced Drawing',
+                                        subtopics: [
+                                          'Managing Images in Illustrator',
+                                          'Advanced Features of Illustrator',
+                                        ],
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 10: Working with Graph',
+                                      ),
+                                      SizedBox(height: 200,)
                                     ],
                                   ),
                                 ),
-                              ),
-                              SingleChildScrollView(
+                                ),
+                              const SingleChildScrollView(
                                 child: Padding(
                                   padding: EdgeInsets.all(16.0),
                                   child: Column(
@@ -176,4 +234,44 @@ class _GraphicDesignState extends State<GraphicDesign>     with SingleTickerProv
       ),
     );
   }
-}
+
+
+}Widget _buildSyllabusModule(String title, {List<String>? subtopics}) {
+    return Container(width: double.infinity,
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff753a88),
+                ),
+              ),
+              if (subtopics != null) ...subtopics.map((subtopic) => Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      '- $subtopic',
+                      style: const TextStyle(
+                        fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+

@@ -80,8 +80,9 @@ class _FullStackState extends State<FullStack>
                         ),
                         SizedBox(height: 20),
                         Text(
-                            style: TextStyle(color: Colors.white),
-                            'Effective programmers excel by managing complex details that others might miss'),
+                          'Transforming ideas into reality with seamless front-end and powerful back-end development.',
+                          style: TextStyle(color: Colors.white),
+                        ),
                         SizedBox(height: 20),
                       ],
                     ),
@@ -103,8 +104,8 @@ class _FullStackState extends State<FullStack>
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 30),
                           child: TabBar(
-                            dividerColor: Colors.white,
                             controller: _tabController,
+                               dividerColor: Colors.white,
                             labelColor: Colors.black,
                             unselectedLabelColor: Colors.black54,
                             indicatorColor: Colors.black,
@@ -116,34 +117,54 @@ class _FullStackState extends State<FullStack>
                         ),
                         const SizedBox(height: 16),
                         SizedBox(
-                          height: 500, 
+                          height: 500,
                           child: TabBarView(
                             controller: _tabController,
-                            children: const [
-                              SingleChildScrollView(
+                            children: [
+                        SingleChildScrollView(
                                 child: Padding(
-                                  padding: EdgeInsets.all(16.0),
+                                  padding: const EdgeInsets.all(16.0),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'Syllabus Content',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(height: 10),
-                                      // Text(
-                                      //   '1. Introduction to Full Stack Development\n2. Frontend Basics\n3. Backend Development\n4. Database Management\n5. Deployment\n6. Project Work',
-                                      //   style: TextStyle(fontSize: 16),
+                                      // const Text(
+                                      //   'Full Stack Development Syllabus',
+                                      //   style: TextStyle(
+                                      //     fontSize: 18,
+                                      //     fontWeight: FontWeight.bold,
+                                      //   ),
                                       // ),
+                                      const SizedBox(height: 10),
+                                      _buildSyllabusModule(
+                                        'Module 1: Frontend',
+                                        subtopics: [
+                                          'HTML',
+                                          'CSS',
+                                          'JavaScript',
+                                          'Angular',
+                                        ],
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 2: Database',
+                                        subtopics: [
+                                          'MySql/Oracle',
+                                          'MongoDb',
+                                        ],
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 3: Backend',
+                                        subtopics: [
+                                          'Java',
+                                          'C',
+                                          'Python',
+                                        ],
+                                      ),
+                                      SizedBox(height: 150,)
                                     ],
                                   ),
                                 ),
                               ),
-                              SingleChildScrollView(
+                              const SingleChildScrollView(
                                 child: Padding(
                                   padding: EdgeInsets.all(16.0),
                                   child: Column(
@@ -158,10 +179,15 @@ class _FullStackState extends State<FullStack>
                                         ),
                                       ),
                                       SizedBox(height: 10),
-                                      // Text(
-                                      //   '1. High Demand for Full Stack Developers\n2. Versatile Skill Set\n3. Better Job Prospects\n4. Higher Salaries\n5. Comprehensive Understanding of Development\n6. Flexibility in Career Options',
-                                      //   style: TextStyle(fontSize: 16),
-                                      // ),
+                                      Text(
+                                        '1. High Demand for Full Stack Developers\n'
+                                        '2. Versatile Skill Set\n'
+                                        '3. Better Job Prospects\n'
+                                        '4. Higher Salaries\n'
+                                        '5. Comprehensive Understanding of Development\n'
+                                        '6. Flexibility in Career Options',
+                                        style: TextStyle(fontSize: 16),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -174,6 +200,45 @@ class _FullStackState extends State<FullStack>
                   ),
                 ],
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+Widget _buildSyllabusModule(String title, {List<String>? subtopics}) {
+    return Container(width: double.infinity,
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color:    Color(0xffcc2b5e),
+                ),
+              ),
+              if (subtopics != null) ...subtopics.map((subtopic) => Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      '- $subtopic',
+                      style: const TextStyle(
+                        fontSize: 14,
+                           fontWeight: FontWeight.bold,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  )),
             ],
           ),
         ),

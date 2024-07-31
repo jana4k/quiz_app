@@ -59,7 +59,7 @@ class _CoursePageState extends State<CoursePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          ' Welcome to Our ',
+                          'Welcome to Our ',
                           style: TextStyle(
                             color: Colors.black45,
                             fontWeight: FontWeight.normal,
@@ -207,7 +207,7 @@ class _CoursePageState extends State<CoursePage> {
                           ),
                         ),
                            const SizedBox(
-            height: 50,
+            height: 150,
           ),
                       ],
                     ),
@@ -227,9 +227,18 @@ class _CoursePageState extends State<CoursePage> {
     required List<Color> gradientColors,
   }) {
     return Container(
+      
       width: 220,
       height: 330,
       decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 3,
+            blurRadius: 1,
+            offset: const Offset(1, 3),
+          )
+        ],
         borderRadius: BorderRadius.circular(18),
         gradient: LinearGradient(
           colors: gradientColors,

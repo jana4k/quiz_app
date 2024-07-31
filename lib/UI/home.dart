@@ -222,169 +222,164 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(3),
-        child: SingleChildScrollView(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Padding(
-            padding: EdgeInsets.all(6),
-            child: SizedBox(
-              height: 50,
-              child: TextField(
-                decoration: InputDecoration(
-                  fillColor: Color.fromARGB(255, 243, 243, 243),
-                  filled: true,
-                  prefixIcon: Icon(
-                    Icons.search_sharp,
-                    color: Colors.grey,
-                    size: 35,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(3),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Padding(
+              padding: EdgeInsets.all(6),
+              child: SizedBox(
+                height: 50,
+                child: TextField(
+                  decoration: InputDecoration(
+                    fillColor: Color.fromARGB(255, 243, 243, 243),
+                    filled: true,
+                    prefixIcon: Icon(
+                      Icons.search_sharp,
+                      color: Colors.grey,
+                      size: 35,
+                    ),
+                    labelText: 'Search for a quiz',
+                    labelStyle: TextStyle(
+                      color: Color.fromARGB(255, 141, 141, 141),
+                    ),
+                    disabledBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    // focusedBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    focusedErrorBorder: InputBorder.none,
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(14))),
                   ),
-                  labelText: 'Search for a quiz',
-                  labelStyle: TextStyle(
-                    color: Color.fromARGB(255, 141, 141, 141),
-                  ),
-                  disabledBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  // focusedBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  focusedErrorBorder: InputBorder.none,
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(14))),
                 ),
               ),
             ),
-          ),
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18.0),
-            ),
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Color(0xff2100a6),
-                borderRadius: BorderRadius.all(Radius.circular(16.0)),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
               ),
-              padding: const EdgeInsets.all(16.0),
-              child: Stack(
-                children: [
-                  // Background design elements
-                  Positioned(
-                    top: -20,
-                    right: -20,
-                    child: Icon(Icons.quiz,
-                        size: 100, color: Colors.white.withOpacity(0.1)),
-                  ),
-                  Positioned(
-                    bottom: -20,
-                    left: -20,
-                    child: Icon(Icons.star,
-                        size: 100, color: Colors.white.withOpacity(0.1)),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Join the Quiz',
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8.0),
-                      const Text(
-                        'Aptitude Quiz',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      const SizedBox(height: 16.0),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.white, // Text color
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24.0,
-                            vertical: 8.0,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Color(0xff2100a6),
+                  borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                ),
+                padding: const EdgeInsets.all(16.0),
+                child: Stack(
+                  children: [
+                    // Background design elements
+                    Positioned(
+                      top: -20,
+                      right: -20,
+                      child: Icon(Icons.quiz,
+                          size: 100, color: Colors.white.withOpacity(0.1)),
+                    ),
+                    Positioned(
+                      bottom: -20,
+                      left: -20,
+                      child: Icon(Icons.star,
+                          size: 100, color: Colors.white.withOpacity(0.1)),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'TekZow Courses',
+                          style: TextStyle(
+                            fontSize: 24.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        onPressed: () async {
-                          //  addQuestionsToFirestore();
-                          final quizStatus =
-                              await _fetchQuizStatus(widget.user, 'Aptitude');
-                          if (await _showAccessCodeDialog(
-                              context)) if (quizStatus ==
-                                  'not_started' ||
-                              quizStatus == 'in_progress') {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => QuizScreen(
-                                  userName: _userName,
-                                  user: widget.user,
-                                  category: 'Aptitude',
-                                ),
-                              ),
-                            ).then((_) {
-                              _fetchUserName();
-                            });
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('You have completed this Quiz!'),
-                              ),
-                            );
-                          }
-                          else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Incorrect access code.'),
-                              ),
-                            );
-                          }
-                        },
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text('Get Started',
-                                style: TextStyle(
-                                    color: Color(0xff2100a6),
-                                    fontWeight: FontWeight.bold)),
-                            SizedBox(width: 2.0),
-                            Icon(
-                              Icons.arrow_right,
-                              size: 24,
-                              color: Color(0xff2100a6),
+                        const SizedBox(height: 8.0),
+                        const Text(
+                          'Enroll Your Courses Now!',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        const SizedBox(height: 16.0),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.white, // Text color
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24.0,
+                              vertical: 8.0,
                             ),
-                          ],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          onPressed: () async {
+                            //  addQuestionsToFirestore();
+                            final quizStatus =
+                                await _fetchQuizStatus(widget.user, 'Aptitude');
+                            if (await _showAccessCodeDialog(
+                                context)) if (quizStatus ==
+                                    'not_started' ||
+                                quizStatus == 'in_progress') {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => QuizScreen(
+                                    userName: _userName,
+                                    user: widget.user,
+                                    category: 'Aptitude',
+                                  ),
+                                ),
+                              ).then((_) {
+                                _fetchUserName();
+                              });
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content:
+                                      Text('You have completed this Quiz!'),
+                                ),
+                              );
+                            }
+                          },
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('Get Started',
+                                  style: TextStyle(
+                                      color: Color(0xff2100a6),
+                                      fontWeight: FontWeight.bold)),
+                              SizedBox(width: 2.0),
+                              Icon(
+                                Icons.arrow_right,
+                                size: 24,
+                                color: Color(0xff2100a6),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 16.0),
-          const Text(
-            textAlign: TextAlign.left,
-            'Categories',
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16.0),
-          CategoryList(
-            onCategorySelected: (category) =>
-                _onCategorySelected(context, category),
-          ),
-          const SizedBox(height: 16.0),
-          const Text(
-            'Recent',
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16.0),
-          SizedBox(height: 300, child: RecentSection(user: widget.user)),
-        ])),
+            const SizedBox(height: 16.0),
+            const Text(
+              textAlign: TextAlign.left,
+              'Categories',
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16.0),
+            CategoryList(
+              onCategorySelected: (category) =>
+                  _onCategorySelected(context, category),
+            ),
+            const SizedBox(height: 16.0),
+            const Text(
+              'Recent',
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16.0),
+            RecentSection(user: widget.user),
+          ]),
+        ),
       ),
     ));
   }
@@ -654,6 +649,8 @@ class RecentSection extends StatelessWidget {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: 1,
               itemBuilder: (context, index) {
                 return QuizCard(
@@ -668,6 +665,8 @@ class RecentSection extends StatelessWidget {
 
         final quizStatuses = snapshot.data!;
         return ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: quizStatuses.length,
           itemBuilder: (context, index) {
             final quizStatus = quizStatuses[index];
@@ -751,6 +750,12 @@ Future<bool> _showAccessCodeDialog(BuildContext context) async {
             onPressed: () {
               if (codeController.text == correctCode) {
                 isCodeCorrect = true;
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Incorrect access code.'),
+                  ),
+                );
               }
               Navigator.of(context).pop();
             },

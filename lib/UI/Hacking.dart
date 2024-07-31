@@ -78,7 +78,7 @@ class _EthicalHackingState extends State<EthicalHacking>     with SingleTickerPr
                         SizedBox(height: 40),
                         Text(
                             style: TextStyle(color: Colors.white),
-                            'Effective programmers excel by managing complex details that others might miss'),
+                            'Securing the digital world, one vulnerability at a time.'),
                         SizedBox(height: 20),
                       ],
                     ),
@@ -116,26 +116,115 @@ class _EthicalHackingState extends State<EthicalHacking>     with SingleTickerPr
                           height: 500, // Set a fixed height for TabBarView
                           child: TabBarView(
                             controller: _tabController,
-                            children: const [
-                              SingleChildScrollView(
+                            children:  [
+                            SingleChildScrollView(
                                 child: Padding(
-                                  padding: EdgeInsets.all(16.0),
+                                  padding: const EdgeInsets.all(16.0),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'Syllabus Content',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(height: 10),
-                                      // Text(
-                                      //   '1. Introduction to Full Stack Development\n2. Frontend Basics\n3. Backend Development\n4. Database Management\n5. Deployment\n6. Project Work',
-                                      //   style: TextStyle(fontSize: 16),
+                                      // const Text(
+                                      //   'Ethical Hacking Syllabus',
+                                      //   style: TextStyle(
+                                      //     fontSize: 18,
+                                      //     fontWeight: FontWeight.bold,
+                                      //   ),
                                       // ),
+                                      const SizedBox(height: 5),
+                                      _buildSyllabusModule(
+                                        'Module 1: Principles of Hacking & Legal Parameters',
+                                        subtopics: [
+                                          'Ethical Hacking Overviews',
+                                          'Principles of Ethical hacking',
+                                          'Hacking Methodologies',
+                                          'Role of Ethical Hacker',
+                                          'Scope & limitations of hacking.',
+                                          'Cyber Threats and Attacks Vectors',
+                                          'Hacking tools and techniques',
+                                          'Policies and Controls',
+                                          'Overview of PT / VA',
+                                        ],
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 2: Viruses, Trojans, Malwares, and OS Level Attacks and Counter Measures. Malware Analysis.',
+                                        subtopics: [
+                                          'Malware Overviews',
+                                          'Virus Worm & Trojan Concepts',
+                                          'Malware Analysis',
+                                        ],
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 3: Footprinting, Enumeration, Scanning, Sniffing, Social Engineering',
+                                        subtopics: [
+                                          'Footprinting through Search Engines, Web Services',
+                                          'Footprinting through Web Services',
+                                          'Enumeration',
+                                          'Scanning targets',
+                                          'Sniffing Network',
+                                          'Social Engineering',
+                                        ],
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 4: SQL Injection, DOS Attacks, Session Hijacking, and System Hacking',
+                                        subtopics: [
+                                          'SQL Injection',
+                                          'DOS Attacks',
+                                          'Session Hijacking',
+                                          'System Hacking',
+                                        ],
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 5: Web Applications and Web Servers Attacking Methodology and Countermeasures',
+                                        subtopics: [
+                                          'Basics to Web application & threats',
+                                          'OWASP Top 10 Application Security Risks',
+                                          'Web Hacking methodology and tools',
+                                          'Introduction to Web Server',
+                                          'Counter measures',
+                                        ],
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 6: IoT and Cloud Attacks and Defense Mechanisms',
+                                        subtopics: [
+                                          'IOT Concept and Attacks',
+                                          'Cloud Computing Overview',
+                                          'Threats and attack in Cloud',
+                                          'Cloud Security and tool',
+                                        ],
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 7: Mobile & Wireless Networks Hacking and Counter Measures',
+                                        subtopics: [
+                                          'Mobile Hacking',
+                                          'Wireless Overview',
+                                          'Wireless Hacking Methodology',
+                                        ],
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 8: Firewall, IDS and Honeypot Evasion Techniques, Evasion Tools, and Countermeasures',
+                                        subtopics: [
+                                          'Basics of Firewalls, IDS, Honeypots',
+                                          'IDS/Firewall/Honeypot Evasion Techniques',
+                                        ],
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 9: Cryptology, Vulnerability Analysis, Logging and Audit',
+                                        subtopics: [
+                                          'Introduction to Cryptography Concepts',
+                                          'Encryption Algorithms',
+                                          'Email, Disk Encryption and Cryptanalysis',
+                                          'Vulnerability Analysis',
+                                        ],
+                                      ),
+                                      _buildSyllabusModule(
+                                        'Module 10: Capture the flag [CTF]',
+                                        subtopics: [
+                                          'Bandit Overthewire [WarGame]',
+                                          'Natas Overthewire [WarGame]',
+                                          'Mr. Robot',
+                                        ],
+                                      ),
+                                          // const SizedBox(height: 200),
                                     ],
                                   ),
                                 ),
@@ -178,3 +267,41 @@ class _EthicalHackingState extends State<EthicalHacking>     with SingleTickerPr
     );
   }
 }
+Widget _buildSyllabusModule(String title, {List<String>? subtopics}) {
+    return Container(width: double.infinity,
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color:    const Color(0xff2B32B2),
+                ),
+              ),
+              if (subtopics != null) ...subtopics.map((subtopic) => Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      '- $subtopic',
+                      style: const TextStyle(
+                        fontSize: 14,
+                           fontWeight: FontWeight.bold,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
