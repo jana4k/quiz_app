@@ -119,11 +119,12 @@ class _GraphicDesignState extends State<GraphicDesign>
                           child: TabBarView(
                             controller: _tabController,
                             children: [
-                           SingleChildScrollView(
+                              SingleChildScrollView(
                                 child: Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       // const Text(
                                       //   'Graphic Design Syllabus',
@@ -192,11 +193,13 @@ class _GraphicDesignState extends State<GraphicDesign>
                                       _buildSyllabusModule(
                                         'Module 10: Working with Graph',
                                       ),
-                                      SizedBox(height: 200,)
+                                      const SizedBox(
+                                        height: 160,
+                                      )
                                     ],
                                   ),
                                 ),
-                                ),
+                              ),
                               const SingleChildScrollView(
                                 child: Padding(
                                   padding: EdgeInsets.all(16.0),
@@ -204,22 +207,94 @@ class _GraphicDesignState extends State<GraphicDesign>
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'Benefits Content',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: Text(
+                                          'Benefits of this course',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xffFFB75E),
+                                            letterSpacing: 1.2,
+                                          ),
                                         ),
                                       ),
-                                      SizedBox(height: 10),
-                                      // Text(
-                                      //   '1. High Demand for Full Stack Developers\n2. Versatile Skill Set\n3. Better Job Prospects\n4. Higher Salaries\n5. Comprehensive Understanding of Development\n6. Flexibility in Career Options',
-                                      //   style: TextStyle(fontSize: 16),
+                                      SizedBox(height: 20),
+                                      ListTile(
+                                        leading: Icon(Icons.brush,
+                                            color: Colors.blueAccent),
+                                        title: Text(
+                                          'Creative Expression and Artistic Freedom',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.design_services,
+                                            color: Colors.green),
+                                        title: Text(
+                                          'Diverse Career Opportunities',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.palette,
+                                            color: Colors.orange),
+                                        title: Text(
+                                          'Skill Development in Design Tools',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.visibility,
+                                            color: Colors.teal),
+                                        title: Text(
+                                          'High Demand for Visual Content',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.people,
+                                            color: Colors.purple),
+                                        title: Text(
+                                          'Collaboration with Creative Teams',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.web,
+                                            color: Colors.redAccent),
+                                        title: Text(
+                                          'Opportunities in Digital Media and Web Design',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                      SizedBox(height: 20),
+                                      // ElevatedButton(
+                                      //   onPressed: () {
+                                      //     // Add your action here
+                                      //   },
+                                      //   style: ElevatedButton.styleFrom(
+                                      //     padding: const EdgeInsets.symmetric(
+                                      //         vertical: 12.0, horizontal: 24.0),
+                                      //     shape: RoundedRectangleBorder(
+                                      //       borderRadius:
+                                      //           BorderRadius.circular(12.0),
+                                      //     ),
+                                      //     backgroundColor: Colors.deepPurple,
+                                      //   ),
+                                      //   child: const Text(
+                                      //     'Learn More',
+                                      //     style: TextStyle(
+                                      //       color: Colors.white,
+                                      //       fontSize: 16,
+                                      //     ),
+                                      //   ),
                                       // ),
                                     ],
                                   ),
                                 ),
-                              ),
+                              )
                             ],
                           ),
                         ),
@@ -234,44 +309,45 @@ class _GraphicDesignState extends State<GraphicDesign>
       ),
     );
   }
+}
 
-
-}Widget _buildSyllabusModule(String title, {List<String>? subtopics}) {
-    return Container(width: double.infinity,
-      child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        margin: const EdgeInsets.symmetric(vertical: 8),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff753a88),
-                ),
+Widget _buildSyllabusModule(String title, {List<String>? subtopics}) {
+  return SizedBox(
+    width: double.infinity,
+    child: Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Color(0xffED8F03),
               ),
-              if (subtopics != null) ...subtopics.map((subtopic) => Padding(
+            ),
+            if (subtopics != null)
+              ...subtopics.map((subtopic) => Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
                       '- $subtopic',
                       style: const TextStyle(
                         fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.bold,
                         color: Colors.black54,
                       ),
                     ),
                   )),
-            ],
-          ),
+          ],
         ),
       ),
-    );
-  }
-
+    ),
+  );
+}

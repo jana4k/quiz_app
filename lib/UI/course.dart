@@ -122,8 +122,9 @@ class _CoursePageState extends State<CoursePage> {
                             child: Text(
                               'Courses',
                               style: TextStyle(
-                                fontSize: 18.0,
+                                fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
+                                color: Colors.black87,
                               ),
                             ),
                           ),
@@ -206,9 +207,9 @@ class _CoursePageState extends State<CoursePage> {
                             ],
                           ),
                         ),
-                           const SizedBox(
-            height: 150,
-          ),
+                        const SizedBox(
+                          height: 100,
+                        ),
                       ],
                     ),
                   ),
@@ -227,16 +228,15 @@ class _CoursePageState extends State<CoursePage> {
     required List<Color> gradientColors,
   }) {
     return Container(
-      
-      width: 220,
-      height: 330,
+      width: 250,
+      height: 370,
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 3,
-            blurRadius: 1,
-            offset: const Offset(1, 3),
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 4,
+            blurRadius: 2,
+            offset: const Offset(1, 1),
           )
         ],
         borderRadius: BorderRadius.circular(18),
@@ -255,7 +255,7 @@ class _CoursePageState extends State<CoursePage> {
               title,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 18,
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -266,12 +266,11 @@ class _CoursePageState extends State<CoursePage> {
           Center(
             child: Image.asset(
               imageUrl,
-              width: 190,
-              height: 180,
+              width: 200,
+              height: 200,
               fit: BoxFit.cover,
             ),
           ),
-         
         ],
       ),
     );

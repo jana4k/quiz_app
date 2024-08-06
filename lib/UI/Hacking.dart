@@ -7,7 +7,8 @@ class EthicalHacking extends StatefulWidget {
   State<EthicalHacking> createState() => _EthicalHackingState();
 }
 
-class _EthicalHackingState extends State<EthicalHacking>     with SingleTickerProviderStateMixin {
+class _EthicalHackingState extends State<EthicalHacking>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -21,6 +22,7 @@ class _EthicalHackingState extends State<EthicalHacking>     with SingleTickerPr
     _tabController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,8 +32,8 @@ class _EthicalHackingState extends State<EthicalHacking>     with SingleTickerPr
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
-              const Color(0xff1488CC),
-                                    const Color(0xff2B32B2),
+                Color(0xff1488CC),
+                Color(0xff2B32B2),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -99,12 +101,12 @@ class _EthicalHackingState extends State<EthicalHacking>     with SingleTickerPr
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 30),
-                          child: TabBar(                     
+                          child: TabBar(
                             controller: _tabController,
                             labelColor: Colors.black,
                             unselectedLabelColor: Colors.black54,
                             indicatorColor: Colors.black,
-                               dividerColor: Colors.white,
+                            dividerColor: Colors.white,
                             tabs: const [
                               Tab(text: 'Syllabus'),
                               Tab(text: 'Benefits'),
@@ -116,12 +118,13 @@ class _EthicalHackingState extends State<EthicalHacking>     with SingleTickerPr
                           height: 500, // Set a fixed height for TabBarView
                           child: TabBarView(
                             controller: _tabController,
-                            children:  [
-                            SingleChildScrollView(
+                            children: [
+                              SingleChildScrollView(
                                 child: Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       // const Text(
                                       //   'Ethical Hacking Syllabus',
@@ -224,34 +227,106 @@ class _EthicalHackingState extends State<EthicalHacking>     with SingleTickerPr
                                           'Mr. Robot',
                                         ],
                                       ),
-                                          // const SizedBox(height: 200),
+                                      const SizedBox(height: 160),
                                     ],
                                   ),
                                 ),
                               ),
-                              SingleChildScrollView(
+                              const SingleChildScrollView(
                                 child: Padding(
                                   padding: EdgeInsets.all(16.0),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'Benefits Content',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: Text(
+                                          'Benefits of this course',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.deepPurple,
+                                            letterSpacing: 1.2,
+                                          ),
                                         ),
                                       ),
-                                      SizedBox(height: 10),
-                                      // Text(
-                                      //   '1. High Demand for Full Stack Developers\n2. Versatile Skill Set\n3. Better Job Prospects\n4. Higher Salaries\n5. Comprehensive Understanding of Development\n6. Flexibility in Career Options',
-                                      //   style: TextStyle(fontSize: 16),
+                                      SizedBox(height: 20),
+                                      ListTile(
+                                        leading: Icon(Icons.security,
+                                            color: Colors.blueAccent),
+                                        title: Text(
+                                          'Critical Role in Cybersecurity',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.lock_open,
+                                            color: Colors.green),
+                                        title: Text(
+                                          'Understanding of Security Threats',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.build,
+                                            color: Colors.orange),
+                                        title: Text(
+                                          'Problem-Solving and Analytical Skills',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.laptop,
+                                            color: Colors.teal),
+                                        title: Text(
+                                          'High Demand for Cybersecurity Professionals',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.shield,
+                                            color: Colors.purple),
+                                        title: Text(
+                                          'Contribution to Ethical Practices',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.network_check,
+                                            color: Colors.redAccent),
+                                        title: Text(
+                                          'Skills in Network and System Security',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                      SizedBox(height: 20),
+                                      // ElevatedButton(
+                                      //   onPressed: () {
+                                      //     // Add your action here
+                                      //   },
+                                      //   style: ElevatedButton.styleFrom(
+                                      //     padding: const EdgeInsets.symmetric(
+                                      //         vertical: 12.0, horizontal: 24.0),
+                                      //     shape: RoundedRectangleBorder(
+                                      //       borderRadius:
+                                      //           BorderRadius.circular(12.0),
+                                      //     ),
+                                      //     backgroundColor: Colors.deepPurple,
+                                      //   ),
+                                      //   child: const Text(
+                                      //     'Learn More',
+                                      //     style: TextStyle(
+                                      //       color: Colors.white,
+                                      //       fontSize: 16,
+                                      //     ),
+                                      //   ),
                                       // ),
                                     ],
                                   ),
                                 ),
-                              ),
+                              )
                             ],
                           ),
                         ),
@@ -267,41 +342,44 @@ class _EthicalHackingState extends State<EthicalHacking>     with SingleTickerPr
     );
   }
 }
+
 Widget _buildSyllabusModule(String title, {List<String>? subtopics}) {
-    return Container(width: double.infinity,
-      child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        margin: const EdgeInsets.symmetric(vertical: 8),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color:    const Color(0xff2B32B2),
-                ),
+  return SizedBox(
+    width: double.infinity,
+    child: Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Color(0xff2B32B2),
               ),
-              if (subtopics != null) ...subtopics.map((subtopic) => Padding(
+            ),
+            if (subtopics != null)
+              ...subtopics.map((subtopic) => Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
                       '- $subtopic',
                       style: const TextStyle(
                         fontSize: 14,
-                           fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.bold,
                         color: Colors.black54,
                       ),
                     ),
                   )),
-            ],
-          ),
+          ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}

@@ -105,7 +105,7 @@ class _FullStackState extends State<FullStack>
                           padding: const EdgeInsets.symmetric(horizontal: 30),
                           child: TabBar(
                             controller: _tabController,
-                               dividerColor: Colors.white,
+                            dividerColor: Colors.white,
                             labelColor: Colors.black,
                             unselectedLabelColor: Colors.black54,
                             indicatorColor: Colors.black,
@@ -121,11 +121,12 @@ class _FullStackState extends State<FullStack>
                           child: TabBarView(
                             controller: _tabController,
                             children: [
-                        SingleChildScrollView(
+                              SingleChildScrollView(
                                 child: Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       // const Text(
                                       //   'Full Stack Development Syllabus',
@@ -159,7 +160,9 @@ class _FullStackState extends State<FullStack>
                                           'Python',
                                         ],
                                       ),
-                                      SizedBox(height: 150,)
+                                      const SizedBox(
+                                        height: 160,
+                                      )
                                     ],
                                   ),
                                 ),
@@ -171,27 +174,92 @@ class _FullStackState extends State<FullStack>
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'Benefits Content',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20.0),
+                                        child: Text(
+                                          'Benefits of this course',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xffcc2b5e),
+                                            letterSpacing: 1.2,
+                                          ),
                                         ),
                                       ),
-                                      SizedBox(height: 10),
-                                      Text(
-                                        '1. High Demand for Full Stack Developers\n'
-                                        '2. Versatile Skill Set\n'
-                                        '3. Better Job Prospects\n'
-                                        '4. Higher Salaries\n'
-                                        '5. Comprehensive Understanding of Development\n'
-                                        '6. Flexibility in Career Options',
-                                        style: TextStyle(fontSize: 16),
+                                      SizedBox(height: 20),
+                                      ListTile(
+                                        leading: Icon(Icons.trending_up,
+                                            color: Colors.blueAccent),
+                                        title: Text(
+                                          'High Demand for Full Stack Developers',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
                                       ),
+                                      ListTile(
+                                        leading: Icon(Icons.build,
+                                            color: Colors.green),
+                                        title: Text(
+                                          'Versatile Skill Set',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.work,
+                                            color: Colors.orange),
+                                        title: Text(
+                                          'Better Job Prospects',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.attach_money,
+                                            color: Colors.teal),
+                                        title: Text(
+                                          'Higher Salaries',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.school,
+                                            color: Colors.purple),
+                                        title: Text(
+                                          'Comprehensive Understanding of Development',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.swap_horiz,
+                                            color: Colors.redAccent),
+                                        title: Text(
+                                          'Flexibility in Career Options',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                      SizedBox(height: 20),
+                                      // ElevatedButton(
+                                      //   onPressed: () {
+                                      //     // Add your action here
+                                      //   },
+                                      //   style: ElevatedButton.styleFrom(
+                                      //     padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+                                      //     shape: RoundedRectangleBorder(
+                                      //       borderRadius: BorderRadius.circular(12.0),
+                                      //     ),
+                                      //     backgroundColor: Colors.deepPurple,
+                                      //   ),
+                                      //   child: const Text(
+                                      //     'Learn More',
+                                      //     style: TextStyle(
+                                      //       color: Colors.white,
+                                      //       fontSize: 16,
+                                      //     ),
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
                                 ),
-                              ),
+                              )
                             ],
                           ),
                         ),
@@ -207,8 +275,9 @@ class _FullStackState extends State<FullStack>
     );
   }
 
-Widget _buildSyllabusModule(String title, {List<String>? subtopics}) {
-    return Container(width: double.infinity,
+  Widget _buildSyllabusModule(String title, {List<String>? subtopics}) {
+    return SizedBox(
+      width: double.infinity,
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(
@@ -225,20 +294,21 @@ Widget _buildSyllabusModule(String title, {List<String>? subtopics}) {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color:    Color(0xffcc2b5e),
+                  color: Color(0xffcc2b5e),
                 ),
               ),
-              if (subtopics != null) ...subtopics.map((subtopic) => Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      '- $subtopic',
-                      style: const TextStyle(
-                        fontSize: 14,
-                           fontWeight: FontWeight.bold,
-                        color: Colors.black54,
+              if (subtopics != null)
+                ...subtopics.map((subtopic) => Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        '- $subtopic',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black54,
+                        ),
                       ),
-                    ),
-                  )),
+                    )),
             ],
           ),
         ),

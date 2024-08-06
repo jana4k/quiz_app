@@ -11,6 +11,7 @@ import 'package:myapp/UI/quiz_page.dart';
 // import 'package:myapp/models/question.dart';
 
 import 'package:myapp/widgets/loading_dialog.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Category {
   final String id;
@@ -644,7 +645,7 @@ class RecentSection extends StatelessWidget {
       future: fetchUserQuizStatuses(user),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return _buildShimmerLoadingRecent();
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -816,7 +817,7 @@ class CategoryList extends StatelessWidget {
       future: fetchCategories(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return _buildShimmerLoading();
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -851,4 +852,50 @@ class CategoryList extends StatelessWidget {
       },
     );
   }
+}
+
+Widget _buildShimmerLoading() {
+  return SingleChildScrollView(
+    scrollDirection: Axis.horizontal,
+    child: Row(
+      children: List.generate(3, (index) => _buildShimmerCard()),
+    ),
+  );
+}
+
+Widget _buildShimmerCard() {
+  return Shimmer.fromColors(
+    baseColor: Colors.grey[300]!,
+    highlightColor: Colors.grey[100]!,
+    child: Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+      width: 150,
+      height: 120,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+    ),
+  );
+}
+
+Widget _buildShimmerLoadingRecent() {
+  return ListView.builder(
+    shrinkWrap: true,
+    physics: const NeverScrollableScrollPhysics(),
+    itemCount: 3,
+    itemBuilder: (context, index) {
+      return Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: const QuizCard(
+          title: '',
+          status: '',
+          statusColor: Colors.grey,
+          questions: 0,
+          iconData: Icons.blur_on,
+        ),
+      );
+    },
+  );
 }
