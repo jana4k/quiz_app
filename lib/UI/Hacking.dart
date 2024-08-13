@@ -247,7 +247,7 @@ class _EthicalHackingState extends State<EthicalHacking>
                                           style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
-                                            color: Colors.deepPurple,
+                                            color: Color(0xff2B32B2),
                                             letterSpacing: 1.2,
                                           ),
                                         ),
@@ -302,6 +302,75 @@ class _EthicalHackingState extends State<EthicalHacking>
                                         ),
                                       ),
                                       SizedBox(height: 20),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 19),
+                                        child: Text(
+                                          'Certificate',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.deepPurple,
+                                            letterSpacing: 1.2,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      ListTile(
+                                        leading: Icon(Icons.verified,
+                                            color: Colors.blue),
+                                        title: Text(
+                                          'ETHICAL HACKING CERTIFICATION',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        subtitle: Text(
+                                          'Your Path to Certification Begins Here',
+                                          style: TextStyle(
+                                              fontSize: 14, color: Colors.grey),
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      ListTile(
+                                        leading: Icon(Icons.public,
+                                            color: Colors.blue),
+                                        title: Text(
+                                          'Globally Recognized Credential',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                        subtitle: Text(
+                                          'Earn a certificate recognized by worldwide and prestige.',
+                                          style: TextStyle(
+                                              fontSize: 14, color: Colors.grey),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.share,
+                                            color: Colors.green),
+                                        title: Text(
+                                          'Shareable Certificate',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                        subtitle: Text(
+                                          'Add your certification to your LinkedIn profile and resume.',
+                                          style: TextStyle(
+                                              fontSize: 14, color: Colors.grey),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.verified_user,
+                                            color: Colors.orange),
+                                        title: Text(
+                                          'Verifiable Achievement',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                        subtitle: Text(
+                                          'Your certification can be authenticated, enhancing the credibility of your credentials.',
+                                          style: TextStyle(
+                                              fontSize: 14, color: Colors.grey),
+                                        ),
+                                      ),
                                       // ElevatedButton(
                                       //   onPressed: () {
                                       //     // Add your action here

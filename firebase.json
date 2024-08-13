@@ -1,1 +1,37 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"quiz-app-6055e","appId":"1:220315283791:android:008d0faeb95c9a6c6dd53a","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"quiz-app-6055e","configurations":{"android":"1:220315283791:android:008d0faeb95c9a6c6dd53a","ios":"1:220315283791:ios:8ebd5243d1ecb0c46dd53a","web":"1:220315283791:web:c428792215a208bf6dd53a"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "quiz-app-6055e",
+          "appId": "1:220315283791:android:008d0faeb95c9a6c6dd53a",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "quiz-app-6055e",
+          "configurations": {
+            "android": "1:220315283791:android:008d0faeb95c9a6c6dd53a",
+            "ios": "1:220315283791:ios:8ebd5243d1ecb0c46dd53a",
+            "web": "1:220315283791:web:c428792215a208bf6dd53a"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
