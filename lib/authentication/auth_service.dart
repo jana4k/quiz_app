@@ -28,7 +28,16 @@ class AuthService {
     }
     return status;
   }
-
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+ Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+     
+        print(e);
+      
+    }
+  }
   Future<AuthResultStatus> loginWithEmailAndPassword({
     required String email,
     required String password,

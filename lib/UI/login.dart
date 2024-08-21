@@ -26,7 +26,7 @@ class _loginPageState extends State<loginPage> {
               style:
                   TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
           centerTitle: true,
-          backgroundColor:  Colors.blueAccent,
+          backgroundColor: Colors.blueAccent,
         ),
         body: Form(
           key: _formKey,
@@ -66,8 +66,6 @@ class _loginPageState extends State<loginPage> {
                         color: Colors.blueAccent,
                       ),
                     ),
-                 
-                 
                     const SizedBox(height: 20),
                     _buildTextField(
                       controller: _emailController,
@@ -100,15 +98,30 @@ class _loginPageState extends State<loginPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     TextButton(
                       onPressed: () {
-                       Navigator.push(context, MaterialPageRoute(builder:  (context) => const SignupPage()));
+                        _forgotPassword();
                       },
                       child: const Text(
-                        'Don`t have an account? Sign up',
+                        'Forgot Password?',
                         style: TextStyle(
-                            color:Colors.blueAccent,
+                          color: Colors.blueAccent,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SignupPage()));
+                      },
+                      child: const Text(
+                        'Don’t have an account? Sign up',
+                        style: TextStyle(
+                            color: Colors.blueAccent,
                             fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -146,13 +159,13 @@ class _loginPageState extends State<loginPage> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(color:Colors.blueAccent),
+          borderSide: const BorderSide(color: Colors.blueAccent),
         ),
-        labelStyle: const TextStyle(color:Colors.blueAccent),
+        labelStyle: const TextStyle(color: Colors.blueAccent),
       ),
     );
   }
- 
+
   void _login() {
     LoadingDialog.show(context);
     AuthService()
@@ -160,10 +173,9 @@ class _loginPageState extends State<loginPage> {
             email: _emailController.text, password: _passwordController.text)
         .then((status) {
       if (status == AuthResultStatus.successful) {
-     
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text('Login successful')));
-               LoadingDialog.hide(context);
+        LoadingDialog.hide(context);
       } else {
         LoadingDialog.hide(context);
         String error = AuthExceptionHandler.generateExceptionMessage(status);
@@ -171,5 +183,69 @@ class _loginPageState extends State<loginPage> {
             .showSnackBar(SnackBar(content: Text(error)));
       }
     });
+  }
+
+  void _forgotPassword() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        TextEditingController resetEmailController = TextEditingController();
+
+        return AlertDialog(
+          title: const Text('Forgot Password'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Enter your email to reset your password:'),
+              const SizedBox(height: 10),
+              TextField(
+                controller: resetEmailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  prefixIcon: const Icon(Icons.email, color: Colors.blueAccent),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Colors.blueAccent),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child:
+                  const Text('Cancel', style: TextStyle(color: Colors.black54)),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  await AuthService()
+                      .sendPasswordResetEmail(resetEmailController.text);
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Password reset email sent')),
+                  );
+                } catch (error) {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(error.toString())),
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+              ),
+              child: const Text('Submit'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
