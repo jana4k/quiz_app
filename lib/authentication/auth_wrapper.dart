@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/UI/course.dart';
 import 'package:myapp/UI/home.dart';
 import 'package:myapp/UI/login.dart';
+import 'package:myapp/UI/welcome.dart';
 
 class AuthenticationWrapper extends StatefulWidget {
   const AuthenticationWrapper({super.key});
@@ -63,7 +64,7 @@ class _AuthenticationWrapperState extends State<AuthenticationWrapper> {
                 ),
               );
             } else {
-              return const loginPage();
+              return const Welcome();
             }
           }
         },

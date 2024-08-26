@@ -4,14 +4,14 @@ import 'package:myapp/authentication/auth_exception.dart';
 import 'package:myapp/authentication/auth_service.dart';
 import 'package:myapp/widgets/loading_dialog.dart';
 
-class loginPage extends StatefulWidget {
-  const loginPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  _loginPageState createState() => _loginPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _loginPageState extends State<loginPage> {
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -20,23 +20,29 @@ class _loginPageState extends State<loginPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: const Text('Login',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-          centerTitle: true,
-          backgroundColor: Colors.blueAccent,
-        ),
-        body: Form(
-          key: _formKey,
-          child: Center(
-            child: SingleChildScrollView(
+        body: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Center(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(12.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text(
+                      'Login here',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff2100a6),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     Stack(
                       alignment: Alignment.center,
                       children: [
@@ -49,7 +55,7 @@ class _loginPageState extends State<loginPage> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: Colors.blueAccent,
+                                color: const Color(0xff2100a6),
                                 width: 4.0,
                               ),
                             ),
@@ -57,60 +63,69 @@ class _loginPageState extends State<loginPage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 30),
-                    const Text(
-                      'Join the Quiz!',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blueAccent,
+                    const SizedBox(height: 20),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      child: Text(
+                        'Welcome back you`ve been missed!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 20),
                     _buildTextField(
                       controller: _emailController,
                       labelText: 'Email',
-                      icon: Icons.email,
+                    
                     ),
                     const SizedBox(height: 20),
                     _buildTextField(
                       controller: _passwordController,
                       labelText: 'Password',
-                      icon: Icons.lock,
+                    
                       obscureText: true,
                     ),
-                    const SizedBox(height: 20),
-                    ElevatedButton.icon(
+                    const SizedBox(height: 5),
+                   Row(
+  mainAxisAlignment: MainAxisAlignment.end, // Aligns the TextButton to the right
+  children: [
+    TextButton(
+      onPressed: () {
+        _forgotPassword();
+      },
+      child: const Text(
+        'Forgot Password?',
+        style: TextStyle(
+          color:   Color(0xff2100a6),
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+  ],
+),const SizedBox(height: 5),
+                    ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           _login();
                         }
                       },
-                      icon: const Icon(Icons.check),
-                      label: const Text('Login'),
+                      // icon: const Icon(Icons.check),
+                    child: const Text('Login'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
+                        backgroundColor:      Color(0xff2100a6),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 30, vertical: 15),
                         textStyle: const TextStyle(fontSize: 18),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    TextButton(
-                      onPressed: () {
-                        _forgotPassword();
-                      },
-                      child: const Text(
-                        'Forgot Password?',
-                        style: TextStyle(
-                          color: Colors.blueAccent,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+                   const SizedBox(height: 10),
                     TextButton(
                       onPressed: () {
                         Navigator.push(
@@ -121,7 +136,7 @@ class _loginPageState extends State<loginPage> {
                       child: const Text(
                         'Don’t have an account? Sign up',
                         style: TextStyle(
-                            color: Colors.blueAccent,
+                            color:   Color(0xff2100a6),
                             fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -138,7 +153,7 @@ class _loginPageState extends State<loginPage> {
   Widget _buildTextField({
     required TextEditingController controller,
     required String labelText,
-    required IconData icon,
+
     bool obscureText = false,
   }) {
     return TextFormField(
@@ -150,18 +165,17 @@ class _loginPageState extends State<loginPage> {
       },
       controller: controller,
       obscureText: obscureText,
-      decoration: InputDecoration(
-        fillColor: Colors.blueAccent,
+      decoration: InputDecoration(hoverColor: Colors.black,focusColor: Colors.black,
+        fillColor: Colors.black,
         labelText: labelText,
-        prefixIcon: Icon(icon, color: Colors.lightBlue),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(10),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(color: Colors.blueAccent),
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: Colors.black),
         ),
-        labelStyle: const TextStyle(color: Colors.blueAccent),
+        labelStyle: const TextStyle(color: Colors.grey),
       ),
     );
   }
@@ -202,13 +216,13 @@ class _loginPageState extends State<loginPage> {
                 controller: resetEmailController,
                 decoration: InputDecoration(
                   labelText: 'Email',
-                  prefixIcon: const Icon(Icons.email, color: Colors.blueAccent),
+                  prefixIcon: const Icon(Icons.email,    color: Color(0xff2100a6),),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: Colors.blueAccent),
+                    borderSide: const BorderSide(color:     Color(0xff2100a6),),
                   ),
                 ),
               ),
@@ -239,7 +253,7 @@ class _loginPageState extends State<loginPage> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
+                backgroundColor:    Color(0xff2100a6),
               ),
               child: const Text('Submit'),
             ),

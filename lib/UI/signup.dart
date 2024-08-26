@@ -55,25 +55,31 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+   return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: const Text('Sign Up',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-          centerTitle: true,
-          backgroundColor:  Colors.blueAccent,
-        ),
-        body: Form(
-          key: _formKey,
-          child: Center(
-            child: SingleChildScrollView(
+        body: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Center(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(12.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text(
+                      'Login here',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff2100a6),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     Stack(
                       alignment: Alignment.center,
                       children: [
@@ -86,7 +92,7 @@ class _SignupPageState extends State<SignupPage> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: Colors.blueAccent,
+                                color: const Color(0xff2100a6),
                                 width: 4.0,
                               ),
                             ),
@@ -94,62 +100,66 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 30),
-                    const Text(
-                      'Join the Quiz!',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blueAccent,
+                    const SizedBox(height: 20),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 60),
+                      child: Text(
+                        'Create an account so you can explore all the quiz',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 20),
                     _buildTextField(
                       controller: _nameController,
                       labelText: 'Name',
-                      icon: Icons.verified_user,
+                  
                     ),
                     const SizedBox(height: 20),
                     _buildTextField(
                       controller: _emailController,
                       labelText: 'Email',
-                      icon: Icons.email,
+                
                     ),
                     const SizedBox(height: 20),
                     _buildTextField(
                       controller: _passwordController,
                       labelText: 'Password',
-                      icon: Icons.lock,
+                 
                       obscureText: true,
                     ),
                     const SizedBox(height: 20),
-                    ElevatedButton.icon(
+                    ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           _signup();
                         }
                       },
-                      icon: const Icon(Icons.check),
-                      label: const Text('Sign Up'),
+                   
+                      child: const Text('Sign Up'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
+                        backgroundColor:  Color(0xff2100a6),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 30, vertical: 15),
                         textStyle: const TextStyle(fontSize: 18),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    // const SizedBox(height: 10),
                     TextButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
                       child: const Text(
-                        'Already have an account? Login',
+                        'Already have an account',
                         style: TextStyle(
-                            color:Colors.blueAccent,
+                            color: Color(0xff2100a6),
                             fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -163,10 +173,10 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
-  Widget _buildTextField({
+   Widget _buildTextField({
     required TextEditingController controller,
     required String labelText,
-    required IconData icon,
+
     bool obscureText = false,
   }) {
     return TextFormField(
@@ -178,20 +188,21 @@ class _SignupPageState extends State<SignupPage> {
       },
       controller: controller,
       obscureText: obscureText,
-      decoration: InputDecoration(
+      decoration: InputDecoration(hoverColor: Colors.black,focusColor: Colors.black,
+        fillColor: Colors.black,
         labelText: labelText,
-        prefixIcon: Icon(icon, color: Colors.lightBlue),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(10),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(color:Colors.blueAccent),
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: Colors.black),
         ),
-        labelStyle: const TextStyle(color:Colors.blueAccent),
+        labelStyle: const TextStyle(color: Colors.grey),
       ),
     );
   }
+
  
   @override
   void dispose() {
