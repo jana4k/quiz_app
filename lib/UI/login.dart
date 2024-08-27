@@ -98,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      const SizedBox(height: 60),
+                      const SizedBox(height: 70),
                       const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -121,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 60),
+                      const SizedBox(height: 70),
 //                         Container(
 //   width: 370, // Slightly larger to give a shadow effect
 //   height: 10,
@@ -155,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Column(
                           children: [
                             const SizedBox(
-                              height: 20,
+                              height: 40,
                             ),
                             const Text(
                               'Welcome back',
@@ -167,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             const SizedBox(
-                              height: 10,
+                              height: 15,
                             ),
                             const Text(
                               'Enter your login credentials',
@@ -178,18 +178,18 @@ class _LoginPageState extends State<LoginPage> {
                                 color: Colors.black87,
                               ),
                             ),
-                            const SizedBox(height: 40),
+                            const SizedBox(height: 50),
                             _buildTextField(
                               controller: _emailController,
                               labelText: 'Email',
                             ),
-                            const SizedBox(height: 25),
+                            const SizedBox(height: 30),
                             _buildTextField(
                               controller: _passwordController,
                               labelText: 'Password',
                               obscureText: true,
                             ),
-                            const SizedBox(height: 40),
+                            const SizedBox(height: 50),
                             ElevatedButton(
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
@@ -208,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
                               // icon: const Icon(Icons.check),
                               child: const Text('Login'),
                             ),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 30),
                             TextButton(
                               onPressed: () {
                                 _forgotPassword();
@@ -221,7 +221,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
-                          
+                            const SizedBox(height: 30),
                           ],
                         ),
                       ),
