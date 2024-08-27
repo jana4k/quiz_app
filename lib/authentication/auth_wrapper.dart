@@ -64,7 +64,7 @@ class _AuthenticationWrapperState extends State<AuthenticationWrapper> {
                 ),
               );
             } else {
-              return const Welcome();
+              return const LoginPage();
             }
           }
         },
